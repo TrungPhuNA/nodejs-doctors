@@ -325,11 +325,12 @@ let updateDoctorInfo = (data) => {
 let getPatientsBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log('------------- statusSuccessId: ', statusSuccessId);
             let patients = await db.Patient.findAll({
                 where: {
                     doctorId: data.doctorId,
                     dateBooking: data.date,
-                    statusId: statusSuccessId
+                    // statusId: statusSuccessId
                 },
                 order: [ [ 'updatedAt', 'ASC' ] ],
                 attributes: [ 'id', 'name', 'gender', 'timeBooking', 'description', 'isSentForms' ]

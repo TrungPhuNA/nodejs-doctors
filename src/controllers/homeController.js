@@ -183,13 +183,18 @@ let getInfoBookingPage = async (req, res) => {
 let postBookingDoctorPageWithoutFiles = async (req, res) => {
     try {
         let item = req.body;
+        console.log('-------------- ITEM: ', item);
         item.statusId = statusNewId;
         item.historyBreath = req.body.breath;
         item.moreInfo = req.body.extraOldForms;
-        if (item.places === 'none') item.placeId = 0;
-        item.placeId = item.places;
-        item.createdAt = Date.now();
+        if (item.places === 'none') {
+            item.placeId = 1;
+        }else {
+            item.placeId = item.places;
+        }
 
+        item.createdAt = Date.now();
+        console.log('-------------- ITEM: ', item);
         let patient = await patientService.createNewPatient(item);
         return res.status(200).json({
             status: 1,
@@ -337,6 +342,15 @@ let getPageAllDoctors = async (req, res)=>{
     }
 };
 
+let getPageAllDoctorsApi = async (req, res)=>{
+    try{
+        let doctors = await homeService.getDataPageAllDoctors();
+        res.status(200).json(doctors);
+    }catch (e) {
+        console.log(e);
+    }
+};
+
 let getPageAllSpecializations =async (req, res)=>{
     try{
         let specializations = await homeService.getDataPageAllSpecializations();
@@ -371,5 +385,6 @@ module.exports = {
     postSearchHomePage: postSearchHomePage,
     getPageAllClinics: getPageAllClinics,
     getPageAllDoctors: getPageAllDoctors,
+    getPageAllDoctorsApi: getPageAllDoctorsApi,
     getPageAllSpecializations: getPageAllSpecializations
 };

@@ -17,6 +17,7 @@ app.use(cookieParser('secret'));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+// app.use(express.static(__dirname + '/public'));
 
 //config session
 session.configSession(app);
@@ -30,4 +31,4 @@ app.use(passPort.session());
 initRoutes(app);
 
 let port = process.env.PORT;
-app.listen(port || 8080, () => console.log(`Doctors care app is running on port ${port}!`));
+app.listen(port || 8080, () => console.log(`app is running on port ${port}!`));

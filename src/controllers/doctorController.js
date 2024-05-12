@@ -113,7 +113,7 @@ let getManageAppointment = async (req, res) => {
         date: date,
         doctorId: req.user.id
     };
-
+    console.log('-------------------- query@getPatientsBookAppointment', data)
     let appointments = await doctorService.getPatientsBookAppointment(data);
     // sort by range time
     let sort = _.sortBy(appointments, x => x.timeBooking);

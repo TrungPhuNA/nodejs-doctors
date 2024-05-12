@@ -62,6 +62,7 @@ passport.deserializeUser((id, done) => {
 let initRoutes = (app) => {
     router.get("/all-clinics", home.getPageAllClinics);
     router.get("/all-doctors", home.getPageAllDoctors);
+    router.get("/api/v1/doctors", home.getPageAllDoctorsApi);
     router.get("/all-specializations", home.getPageAllSpecializations);
 
     router.get('/webhook', bot.getWebhookFB);
@@ -179,7 +180,31 @@ let initRoutes = (app) => {
 
     router.get('/register', auth.getRegister);
     router.post("/register",  auth.postRegister);
-    // router.get("/verify/:token", auth.verifyAccount);
+
+    router.post("/api/v1/register",  auth.postApiRegister);
+    router.post('/api/v1/login', function(req, res, next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) {
+                res.status(500).json(err);
+            }
+            // Redirect if it fails
+            if (!user) {
+                res.status(500).json(err);
+            }
+
+            req.logIn(user, function(err) {
+                if (err) {
+                    res.status(500).json(err);
+                }
+
+                req.session.save(() => {
+                    // Redirect if it succeeds
+                    res.status(200).json(user);
+                });
+
+            });
+        })(req, res, next);
+    });
 
     router.get("/logout", auth.checkLoggedIn, auth.getLogout);
 

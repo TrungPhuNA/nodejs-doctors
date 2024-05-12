@@ -4,9 +4,11 @@ import userService from "./../services/userService";
 require('dotenv').config();
 
 let register = ({user}, linkVerify) => {
+    console.info("===========[register] ===========[user] : ",user);
+    console.info("===========[register] ===========[linkVerify] : ",linkVerify);
     return new Promise(async (resolve, reject) => {
-        let isEmailSend = await sendEmail(user.local.email, tranRegisterEmail.subject, tranRegisterEmail.template(linkVerify));
-        if (isEmailSend) resolve(tranRegisterEmail.sendSuccess(user.local.email));
+        let isEmailSend = await sendEmail(user.email, tranRegisterEmail.subject, tranRegisterEmail.template(linkVerify));
+        if (isEmailSend) resolve(tranRegisterEmail.sendSuccess(user.email));
         else reject(tranRegisterEmail.sendFail);
     });
 };

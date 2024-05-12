@@ -1,11 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 4.9.7
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 15, 2020 at 02:41 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Host: localhost:8889
+-- Generation Time: May 06, 2024 at 04:38 PM
+-- Server version: 5.7.34
+-- PHP Version: 7.4.21
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,8 +19,6 @@
 --
 -- Database: `doctorcare`
 --
-CREATE DATABASE IF NOT EXISTS `doctorcare` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `doctorcare`;
 
 -- --------------------------------------------------------
 
@@ -25,21 +26,19 @@ USE `doctorcare`;
 -- Table structure for table `clinics`
 --
 
-DROP TABLE IF EXISTS `clinics`;
-CREATE TABLE IF NOT EXISTS `clinics` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `clinics` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `introductionHTML` text DEFAULT NULL,
-  `introductionMarkdown` text DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `introductionHTML` text,
+  `introductionMarkdown` text,
+  `description` text,
   `image` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `clinics`
@@ -58,21 +57,19 @@ INSERT INTO `clinics` (`id`, `name`, `address`, `phone`, `introductionHTML`, `in
 -- Table structure for table `comments`
 --
 
-DROP TABLE IF EXISTS `comments`;
-CREATE TABLE IF NOT EXISTS `comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
   `doctorId` int(11) DEFAULT NULL,
   `timeBooking` varchar(255) DEFAULT NULL,
   `dateBooking` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `content` text DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `content` text,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `comments`
@@ -88,29 +85,27 @@ INSERT INTO `comments` (`id`, `doctorId`, `timeBooking`, `dateBooking`, `name`, 
 -- Table structure for table `doctor_users`
 --
 
-DROP TABLE IF EXISTS `doctor_users`;
-CREATE TABLE IF NOT EXISTS `doctor_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `doctor_users` (
+  `id` int(11) NOT NULL,
   `doctorId` int(11) NOT NULL,
   `clinicId` int(11) NOT NULL,
   `specializationId` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `doctor_users`
 --
 
 INSERT INTO `doctor_users` (`id`, `doctorId`, `clinicId`, `specializationId`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-(1, 2, 1, 1, '2020-11-13 19:46:18', '2020-11-13 19:46:18', NULL),
-(2, 3, 3, 3, '2020-11-13 20:19:56', '2020-11-13 20:19:56', NULL),
-(3, 4, 2, 7, '2020-11-13 20:20:15', '2020-11-13 20:20:15', NULL),
-(4, 5, 5, 4, '2020-11-13 20:20:26', '2020-11-13 20:20:26', NULL),
-(5, 6, 2, 1, '2020-11-13 20:20:38', '2020-11-14 19:49:26', NULL),
-(6, 7, 3, 1, '2020-11-13 20:20:53', '2020-11-14 19:49:12', NULL);
+(1, 2, 1, 1, '2020-11-13 19:46:18', '2024-04-21 23:13:18', NULL),
+(2, 3, 3, 3, '2020-11-13 20:19:56', '2024-04-21 23:13:29', NULL),
+(3, 4, 2, 7, '2020-11-13 20:20:15', '2024-04-21 23:13:41', NULL),
+(4, 5, 5, 4, '2020-11-13 20:20:26', '2024-04-21 23:13:53', NULL),
+(5, 6, 2, 1, '2020-11-13 20:20:38', '2024-04-21 23:14:05', NULL),
+(6, 7, 3, 1, '2020-11-13 20:20:53', '2024-04-21 23:14:18', NULL);
 
 -- --------------------------------------------------------
 
@@ -118,20 +113,29 @@ INSERT INTO `doctor_users` (`id`, `doctorId`, `clinicId`, `specializationId`, `c
 -- Table structure for table `extrainfos`
 --
 
-DROP TABLE IF EXISTS `extrainfos`;
-CREATE TABLE IF NOT EXISTS `extrainfos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `extrainfos` (
+  `id` int(11) NOT NULL,
   `patientId` int(11) DEFAULT NULL,
-  `historyBreath` text DEFAULT NULL,
+  `historyBreath` text,
   `placeId` int(11) DEFAULT NULL,
-  `oldForms` text DEFAULT NULL,
-  `sendForms` text DEFAULT NULL,
-  `moreInfo` text DEFAULT NULL,
+  `oldForms` text,
+  `sendForms` text,
+  `moreInfo` text,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `extrainfos`
+--
+
+INSERT INTO `extrainfos` (`id`, `patientId`, `historyBreath`, `placeId`, `oldForms`, `sendForms`, `moreInfo`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+(1, 10, '', 1, NULL, NULL, '', '2024-04-21 23:30:58', '2024-04-21 23:30:58', NULL),
+(2, 11, '12121', NULL, NULL, NULL, 'adada', '2024-04-21 23:36:54', '2024-04-21 23:36:54', NULL),
+(3, 12, '', 1, NULL, NULL, '', '2024-04-21 23:40:16', '2024-04-21 23:40:16', NULL),
+(4, 13, '', 1, NULL, NULL, '', '2024-05-04 16:03:52', '2024-05-04 16:03:52', NULL),
+(5, 14, '', 1, NULL, NULL, '', '2024-05-04 16:05:40', '2024-05-04 16:05:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -139,9 +143,8 @@ CREATE TABLE IF NOT EXISTS `extrainfos` (
 -- Table structure for table `patients`
 --
 
-DROP TABLE IF EXISTS `patients`;
-CREATE TABLE IF NOT EXISTS `patients` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `patients` (
+  `id` int(11) NOT NULL,
   `doctorId` int(11) NOT NULL,
   `statusId` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -151,15 +154,14 @@ CREATE TABLE IF NOT EXISTS `patients` (
   `email` varchar(255) DEFAULT NULL,
   `gender` varchar(255) DEFAULT NULL,
   `year` varchar(255) DEFAULT NULL,
-  `address` text DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `isSentForms` tinyint(1) NOT NULL DEFAULT 0,
-  `isTakeCare` tinyint(1) NOT NULL DEFAULT 0,
+  `address` text,
+  `description` text,
+  `isSentForms` tinyint(1) NOT NULL DEFAULT '0',
+  `isTakeCare` tinyint(1) NOT NULL DEFAULT '0',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `patients`
@@ -167,7 +169,16 @@ CREATE TABLE IF NOT EXISTS `patients` (
 
 INSERT INTO `patients` (`id`, `doctorId`, `statusId`, `name`, `phone`, `dateBooking`, `timeBooking`, `email`, `gender`, `year`, `address`, `description`, `isSentForms`, `isTakeCare`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
 (4, 2, 1, 'Alex', '0321456789', '15/11/2020', '08:00 - 09:00', 'alex@gmail.com', 'male', '1998', 'usa', 'aaaaaaaaaaaaaaaaaa', 1, 0, '2020-11-14 20:20:18', '2020-11-14 20:22:14', NULL),
-(5, 2, 1, 'Kane', '0321848484', '15/11/2020', '10:00 - 11:00', 'kane@gmail.com', 'male', '1997', 'usa', '', 0, 0, '2020-11-15 08:27:25', '2020-11-15 08:27:40', NULL);
+(5, 2, 1, 'Kane', '0321848484', '15/11/2020', '10:00 - 11:00', 'kane@gmail.com', 'male', '1997', 'usa', '', 0, 0, '2020-11-15 08:27:25', '2020-11-15 08:27:40', NULL),
+(6, 2, 4, 'Phan Phú', '0909111222', '22/04/2024', '10:00 - 11:00', 'phupt.humg.94@gmail.com', 'male', '20', 'Hà Nội', '', 0, 0, '2024-04-21 23:24:15', '2024-04-21 23:24:15', NULL),
+(7, 2, 4, 'TrungPhuNA', '0986420994', '22/04/2024', '16:00 - 17:00', 'doantotnghiep@gmail.com', 'male', '11', 'Ha Nội', '', 1, 0, '2024-04-21 23:24:56', '2024-04-21 23:49:07', NULL),
+(8, 2, 4, 'TrungPhuNA', '0986420994', '22/04/2024', '14:00 - 15:00', 'doantotnghiep@gmail.com', 'male', '20', 'Ha Nội', 'Mô tả', 0, 0, '2024-04-21 23:28:21', '2024-04-21 23:28:21', NULL),
+(9, 2, 4, 'TrungPhuNA', '0986420994', '22/04/2024', '11:00 - 12:00', 'doantotnghiep@gmail.com', 'male', '10', 'Ha Nội', '111', 0, 0, '2024-04-21 23:29:51', '2024-04-21 23:29:51', NULL),
+(10, 2, 4, 'TrungPhuNA', '0986420994', '22/04/2024', '10:00 - 11:00', 'doantotnghiep@gmail.com', 'male', '20', 'Ha Nội', '', 0, 0, '2024-04-21 23:30:58', '2024-04-21 23:30:58', NULL),
+(11, 2, 4, 'TrungPhuNA', '0986420994', '22/04/2024', '10:00 - 11:00', 'phupt.humg.94@gmail.com', 'male', '20', 'Ha Nội', 'Chưa', 0, 0, '2024-04-21 23:36:54', '2024-04-21 23:36:54', NULL),
+(12, 2, 4, 'TrungPhuNA', '0986420994', '22/04/2024', '13:00 - 14:00', 'doantotnghiep@gmail.com', 'male', '20', 'Ha Nội', '', 0, 0, '2024-04-21 23:40:16', '2024-04-21 23:40:16', NULL),
+(13, 2, 1, 'Phú', '0986420994', '05/05/2024', '08:00 - 09:00', 'doantotnghiep@gmail.com', 'male', '20', 'Ha Nội', '212121', 0, 0, '2024-05-04 16:03:52', '2024-05-04 16:04:54', NULL),
+(14, 2, 1, 'Phú đặt', '0986420994', '05/05/2024', '15:00 - 16:00', 'phudat@gmail.com', 'male', '30', 'Thôn thuận yên - Xã Quỳnh ngọc - Quỳnh Lưu - Nghệ An', 'Chờ xác thực', 0, 0, '2024-05-04 16:05:40', '2024-05-04 16:06:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -175,15 +186,13 @@ INSERT INTO `patients` (`id`, `doctorId`, `statusId`, `name`, `phone`, `dateBook
 -- Table structure for table `places`
 --
 
-DROP TABLE IF EXISTS `places`;
-CREATE TABLE IF NOT EXISTS `places` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `places` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `places`
@@ -202,12 +211,11 @@ INSERT INTO `places` (`id`, `name`, `createdAt`, `updatedAt`, `deletedAt`) VALUE
 -- Table structure for table `posts`
 --
 
-DROP TABLE IF EXISTS `posts`;
-CREATE TABLE IF NOT EXISTS `posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `contentMarkdown` text DEFAULT NULL,
-  `contentHTML` text DEFAULT NULL,
+  `contentMarkdown` text,
+  `contentHTML` text,
   `forDoctorId` int(11) DEFAULT NULL,
   `forSpecializationId` int(11) DEFAULT NULL,
   `forClinicId` int(11) DEFAULT NULL,
@@ -216,9 +224,8 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `image` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `posts`
@@ -241,15 +248,13 @@ INSERT INTO `posts` (`id`, `title`, `contentMarkdown`, `contentHTML`, `forDoctor
 -- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `roles`;
-CREATE TABLE IF NOT EXISTS `roles` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `roles`
@@ -266,9 +271,8 @@ INSERT INTO `roles` (`id`, `name`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
 -- Table structure for table `schedules`
 --
 
-DROP TABLE IF EXISTS `schedules`;
-CREATE TABLE IF NOT EXISTS `schedules` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `schedules` (
+  `id` int(11) NOT NULL,
   `doctorId` int(11) NOT NULL,
   `date` varchar(255) DEFAULT NULL,
   `time` varchar(255) DEFAULT NULL,
@@ -276,9 +280,166 @@ CREATE TABLE IF NOT EXISTS `schedules` (
   `sumBooking` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=297 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `schedules`
+--
+
+INSERT INTO `schedules` (`id`, `doctorId`, `date`, `time`, `maxBooking`, `sumBooking`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+(1, 2, '22/04/2024', '09:00 - 10:00', '2', '0', '2024-04-21 23:23:18', '2024-04-21 23:23:18', NULL),
+(2, 2, '22/04/2024', '10:00 - 11:00', '2', '2', '2024-04-21 23:23:18', '2024-04-21 23:36:54', NULL),
+(3, 2, '22/04/2024', '13:00 - 14:00', '2', '1', '2024-04-21 23:23:18', '2024-04-21 23:40:16', NULL),
+(4, 2, '22/04/2024', '14:00 - 15:00', '2', '0', '2024-04-21 23:23:18', '2024-04-21 23:23:18', NULL),
+(5, 2, '22/04/2024', '11:00 - 12:00', '2', '0', '2024-04-21 23:23:18', '2024-04-21 23:23:18', NULL),
+(6, 2, '22/04/2024', '08:00 - 09:00', '2', '0', '2024-04-21 23:23:18', '2024-04-21 23:23:18', NULL),
+(7, 2, '22/04/2024', '15:00 - 16:00', '2', '0', '2024-04-21 23:23:18', '2024-04-21 23:23:18', NULL),
+(8, 2, '22/04/2024', '16:00 - 17:00', '2', '0', '2024-04-21 23:23:18', '2024-04-21 23:23:18', NULL),
+(9, 2, '04/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(10, 2, '04/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(11, 2, '04/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(12, 2, '04/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(13, 2, '04/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(14, 2, '04/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(15, 2, '04/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(16, 2, '04/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(17, 2, '05/05/2024', '08:00 - 09:00', '2', '2', '2024-05-04 16:03:20', '2024-05-04 16:04:54', NULL),
+(18, 2, '05/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(19, 2, '05/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(20, 2, '05/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(21, 2, '05/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(22, 2, '05/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(23, 2, '05/05/2024', '15:00 - 16:00', '2', '2', '2024-05-04 16:03:20', '2024-05-04 16:06:06', NULL),
+(24, 2, '05/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(25, 2, '06/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(26, 2, '06/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(27, 2, '06/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(28, 2, '06/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(29, 2, '06/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(30, 2, '06/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(31, 2, '06/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(32, 2, '06/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(33, 3, '04/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(34, 3, '04/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(35, 3, '04/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(36, 3, '04/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(37, 3, '04/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(38, 3, '04/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(39, 3, '04/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(40, 3, '04/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(41, 3, '05/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(42, 3, '05/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(43, 3, '05/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(44, 3, '05/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(45, 3, '05/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(46, 3, '05/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(47, 3, '05/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(48, 3, '05/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(49, 3, '06/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(50, 3, '06/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(51, 3, '06/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(52, 3, '06/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(53, 3, '06/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(54, 3, '06/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(55, 3, '06/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(56, 3, '06/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(57, 4, '04/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(58, 4, '04/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(59, 4, '04/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(60, 4, '04/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(61, 4, '04/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(62, 4, '04/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(63, 4, '04/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(64, 4, '04/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(65, 4, '05/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(66, 4, '05/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(67, 4, '05/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(68, 4, '05/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(69, 4, '05/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(70, 4, '05/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(71, 4, '05/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(72, 4, '05/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(73, 4, '06/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(74, 4, '06/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(75, 4, '06/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(76, 4, '06/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(77, 4, '06/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(78, 4, '06/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(79, 4, '06/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(80, 4, '06/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(81, 5, '04/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(82, 5, '04/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(83, 5, '04/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(84, 5, '04/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(85, 5, '04/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(86, 5, '04/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(87, 5, '04/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(88, 5, '04/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(89, 5, '05/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(90, 5, '05/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(91, 5, '05/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(92, 5, '05/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(93, 5, '05/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(94, 5, '05/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(95, 5, '05/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(96, 5, '05/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(97, 5, '06/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(98, 5, '06/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(99, 5, '06/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(100, 5, '06/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(101, 5, '06/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(102, 5, '06/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(103, 5, '06/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(104, 5, '06/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(105, 6, '04/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(106, 6, '04/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(107, 6, '04/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(108, 6, '04/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(109, 6, '04/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(110, 6, '04/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(111, 6, '04/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(112, 6, '04/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(113, 6, '05/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(114, 6, '05/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(115, 6, '05/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(116, 6, '05/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(117, 6, '05/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(118, 6, '05/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(119, 6, '05/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(120, 6, '05/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(121, 6, '06/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(122, 6, '06/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(123, 6, '06/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(124, 6, '06/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(125, 6, '06/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(126, 6, '06/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(127, 6, '06/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(128, 6, '06/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(129, 7, '04/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(130, 7, '04/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(131, 7, '04/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(132, 7, '04/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(133, 7, '04/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(134, 7, '04/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(135, 7, '04/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(136, 7, '04/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(137, 7, '05/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(138, 7, '05/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(139, 7, '05/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(140, 7, '05/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(141, 7, '05/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(142, 7, '05/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(143, 7, '05/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(144, 7, '05/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(145, 7, '06/05/2024', '08:00 - 09:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(146, 7, '06/05/2024', '09:00 - 10:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(147, 7, '06/05/2024', '10:00 - 11:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(148, 7, '06/05/2024', '11:00 - 12:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(149, 7, '06/05/2024', '13:00 - 14:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(150, 7, '06/05/2024', '14:00 - 15:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(151, 7, '06/05/2024', '15:00 - 16:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL),
+(152, 7, '06/05/2024', '16:00 - 17:00', '2', '0', '2024-05-04 16:03:20', '2024-05-04 16:03:20', NULL);
 
 -- --------------------------------------------------------
 
@@ -286,11 +447,8 @@ CREATE TABLE IF NOT EXISTS `schedules` (
 -- Table structure for table `sequelizemeta`
 --
 
-DROP TABLE IF EXISTS `sequelizemeta`;
-CREATE TABLE IF NOT EXISTS `sequelizemeta` (
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`)
+CREATE TABLE `sequelizemeta` (
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -318,14 +476,12 @@ INSERT INTO `sequelizemeta` (`name`) VALUES
 -- Table structure for table `session`
 --
 
-DROP TABLE IF EXISTS `session`;
-CREATE TABLE IF NOT EXISTS `session` (
+CREATE TABLE `session` (
   `sid` varchar(36) NOT NULL,
   `expires` datetime DEFAULT NULL,
-  `data` text DEFAULT NULL,
+  `data` text,
   `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`sid`)
+  `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -334,30 +490,28 @@ CREATE TABLE IF NOT EXISTS `session` (
 -- Table structure for table `specializations`
 --
 
-DROP TABLE IF EXISTS `specializations`;
-CREATE TABLE IF NOT EXISTS `specializations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `specializations` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `image` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `specializations`
 --
 
 INSERT INTO `specializations` (`id`, `name`, `description`, `image`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-(1, 'Otolaryngology', NULL, 'otolaryngology.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(2, 'Neurosurgery', NULL, 'neurosurgery.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(3, 'Surgery', NULL, 'surgery.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(4, 'Cardiology (Heart)', NULL, 'cardiology.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(5, 'Medicine', NULL, 'medicine.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(6, 'Transplant Hepatology', NULL, 'neurosurgery.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(7, 'Plastic Surgery', NULL, 'otolaryngology.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL);
+(1, 'Xương khớp', NULL, 'co-xuong-khop.png', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(2, 'Thần Kinh', NULL, 'than-kinh.png', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(3, 'Tiêu hoá', NULL, 'tieu-hoa.png', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(4, 'Tim mạch', NULL, 'tim-mach.png', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(5, 'Tai mũi họng', NULL, 'tai-mui-hong.png', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(6, 'Cột sống', NULL, 'cot-song.png', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(7, 'Y học cổ truyền', NULL, 'otolaryngology.jpg', '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -365,15 +519,13 @@ INSERT INTO `specializations` (`id`, `name`, `description`, `image`, `createdAt`
 -- Table structure for table `statuses`
 --
 
-DROP TABLE IF EXISTS `statuses`;
-CREATE TABLE IF NOT EXISTS `statuses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `statuses` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `statuses`
@@ -392,17 +544,15 @@ INSERT INTO `statuses` (`id`, `name`, `createdAt`, `updatedAt`, `deletedAt`) VAL
 -- Table structure for table `supporterlogs`
 --
 
-DROP TABLE IF EXISTS `supporterlogs`;
-CREATE TABLE IF NOT EXISTS `supporterlogs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `supporterlogs` (
+  `id` int(11) NOT NULL,
   `patientId` int(11) DEFAULT NULL,
   `supporterId` int(11) DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `supporterlogs`
@@ -414,7 +564,16 @@ INSERT INTO `supporterlogs` (`id`, `patientId`, `supporterId`, `content`, `creat
 (9, 4, 8, 'Cancel with reason - The patient canceled the schedule', '2020-11-14 20:20:47', '2020-11-14 20:20:47', NULL),
 (10, 5, NULL, 'The patient made an appointment from the system ', '2020-11-15 08:27:25', '2020-11-15 08:27:25', NULL),
 (11, 5, 8, 'New appointments have been received', '2020-11-15 08:27:36', '2020-11-15 08:27:36', NULL),
-(12, 5, 8, 'The appointment has been successfully booked', '2020-11-15 08:27:40', '2020-11-15 08:27:40', NULL);
+(12, 5, 8, 'The appointment has been successfully booked', '2020-11-15 08:27:40', '2020-11-15 08:27:40', NULL),
+(13, 10, NULL, 'The patient made an appointment from the system ', '2024-04-21 23:30:58', '2024-04-21 23:30:58', NULL),
+(14, 11, NULL, 'The patient made an appointment from the system ', '2024-04-21 23:36:54', '2024-04-21 23:36:54', NULL),
+(15, 12, NULL, 'The patient made an appointment from the system ', '2024-04-21 23:40:16', '2024-04-21 23:40:16', NULL),
+(16, 13, NULL, 'The patient made an appointment from the system ', '2024-05-04 16:03:52', '2024-05-04 16:03:52', NULL),
+(17, 13, 1, 'New appointments have been received', '2024-05-04 16:04:21', '2024-05-04 16:04:21', NULL),
+(18, 13, 1, 'The appointment has been successfully booked', '2024-05-04 16:04:54', '2024-05-04 16:04:54', NULL),
+(19, 14, NULL, 'The patient made an appointment from the system ', '2024-05-04 16:05:40', '2024-05-04 16:05:40', NULL),
+(20, 14, 1, 'New appointments have been received', '2024-05-04 16:05:55', '2024-05-04 16:05:55', NULL),
+(21, 14, 1, 'The appointment has been successfully booked', '2024-05-04 16:06:06', '2024-05-04 16:06:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -422,9 +581,8 @@ INSERT INTO `supporterlogs` (`id`, `patientId`, `supporterId`, `content`, `creat
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
@@ -432,32 +590,207 @@ CREATE TABLE IF NOT EXISTS `users` (
   `phone` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `gender` varchar(255) DEFAULT 'male',
-  `description` text DEFAULT NULL,
+  `description` text,
   `roleId` int(11) NOT NULL,
-  `isActive` tinyint(1) DEFAULT 1,
+  `isActive` tinyint(1) DEFAULT '1',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+  `deletedAt` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `address`, `phone`, `avatar`, `gender`, `description`, `roleId`, `isActive`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-(1, 'admin - HaryPhamDev', 'admin@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'New York', '088456732', 'admin.png', 'male', NULL, 1, 1, '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
-(2, 'Doctor - Evan', 'doctor@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor3.jpg', 'male', '   ', 2, 1, '2020-11-13 19:44:36', '2020-11-13 19:46:18', NULL),
-(3, 'Doctor - Ben', 'doctor5@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor4.jpg', 'male', '   ', 2, 1, '2020-11-13 19:44:36', '2020-11-13 20:19:55', NULL),
-(4, 'Doctor - Hary Pham', 'doctor10@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor1.jpg', 'male', '   ', 2, 1, '2020-11-13 19:44:36', '2020-11-13 20:20:15', NULL),
-(5, 'Doctor - Clever', 'doctor1@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor2.jpg', 'male', '   ', 2, 1, '2020-11-13 19:44:36', '2020-11-13 20:20:26', NULL),
-(6, 'Doctor - Sam', 'doctor2@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor3.jpg', 'male', '      ', 2, 1, '2020-11-13 19:44:36', '2020-11-14 19:49:26', NULL),
-(7, 'Doctor - Eric Pham', 'doctor3@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor4.jpg', 'male', '      ', 2, 1, '2020-11-13 19:44:36', '2020-11-14 19:49:12', NULL),
+(1, 'Adm - Phú Phan', 'admin@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'New York', '088456732', 'admin.png', 'male', NULL, 1, 1, '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
+(2, 'Bác sỹ Anh', 'doctor@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor3.jpg', 'male', '      ', 2, 1, '2020-11-13 19:44:36', '2024-04-21 23:13:18', NULL),
+(3, 'Bác sỹ Đức', 'doctor5@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor4.jpg', 'male', '      ', 2, 1, '2020-11-13 19:44:36', '2024-04-21 23:13:29', NULL),
+(4, 'Bác sỹ Phú', 'doctor10@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor1.jpg', 'male', '      ', 2, 1, '2020-11-13 19:44:36', '2024-04-21 23:13:41', NULL),
+(5, 'Bác sỹ Ngọc', 'doctor1@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor2.jpg', 'male', '      ', 2, 1, '2020-11-13 19:44:36', '2024-04-21 23:13:53', NULL),
+(6, 'Bác sỹ Hạ linh', 'doctor2@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor3.jpg', 'male', '         ', 2, 1, '2020-11-13 19:44:36', '2024-04-21 23:14:05', NULL),
+(7, 'Bác sỹ Hoàng', 'doctor3@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'LA', '088456735', 'doctor4.jpg', 'male', '         ', 2, 1, '2020-11-13 19:44:36', '2024-04-21 23:14:18', NULL),
 (8, 'Supporter - Eric Pham', 'supporter@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'Arizona', '088456736', 'supporter.png', 'male', NULL, 3, 1, '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
 (9, 'Supporter - Eric Pham 1', 'supporter1@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'Arizona', '088456736', 'supporter.png', 'male', NULL, 3, 1, '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
 (10, 'Supporter - Eric Pham 2', 'supporter2@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'Arizona', '088456736', 'supporter.png', 'male', NULL, 3, 1, '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL),
 (11, 'Supporter - Eric Pham 3', 'supporter3@gmail.com', '$2a$07$Bq0hCq3kVrvKUHfMT0NJROmQkx09aEQkGlwBGEdw799YJvWqH1kuy', 'Arizona', '088456736', 'supporter.png', 'male', NULL, 3, 1, '2020-11-13 19:44:36', '2020-11-13 19:44:36', NULL);
-COMMIT;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `clinics`
+--
+ALTER TABLE `clinics`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `doctor_users`
+--
+ALTER TABLE `doctor_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `extrainfos`
+--
+ALTER TABLE `extrainfos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `patients`
+--
+ALTER TABLE `patients`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `places`
+--
+ALTER TABLE `places`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `schedules`
+--
+ALTER TABLE `schedules`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sequelizemeta`
+--
+ALTER TABLE `sequelizemeta`
+  ADD PRIMARY KEY (`name`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `session`
+--
+ALTER TABLE `session`
+  ADD PRIMARY KEY (`sid`);
+
+--
+-- Indexes for table `specializations`
+--
+ALTER TABLE `specializations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `statuses`
+--
+ALTER TABLE `statuses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `supporterlogs`
+--
+ALTER TABLE `supporterlogs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `clinics`
+--
+ALTER TABLE `clinics`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `doctor_users`
+--
+ALTER TABLE `doctor_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `extrainfos`
+--
+ALTER TABLE `extrainfos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `patients`
+--
+ALTER TABLE `patients`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `places`
+--
+ALTER TABLE `places`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `schedules`
+--
+ALTER TABLE `schedules`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+
+--
+-- AUTO_INCREMENT for table `specializations`
+--
+ALTER TABLE `specializations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `statuses`
+--
+ALTER TABLE `statuses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `supporterlogs`
+--
+ALTER TABLE `supporterlogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

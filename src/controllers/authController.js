@@ -17,25 +17,33 @@ let postRegister = async (req, res) => {
     });
     if (!hasErrors.length) {
         try {
+            let user = req.body;
+            console.info("===========[postRegister] ===========[user] : ",user);
 
-            // await authService.register(req.body.name, req.body.rg_email, req.body.rg_password, req.protocol, req.get("host")).then(async (user) => {
-            console.log(user);
-            // res.redirect('login');
-            // let linkVerify = `${req.protocol}://${req.get("host")}/verify/${user.local.verifyToken}`;
-            // await authService.register({user}, linkVerify)
-            // .then((message) => {
-            //     req.flash("success", message);
-            //     res.redirect('/login');
-            // })
-            // .catch((err) => {
-            //     console.log(err);
-            // });
+            let linkVerify = ``;
+            await authService.register({user}, linkVerify)
+
+            req.flash("success", "Thành công");
+            res.redirect('/login');
+            //
+            // await authService.register().then(async (user) => {
+            //     res.redirect('login');
+            //     let linkVerify = `${req.protocol}://${req.get("host")}/verify/${user.local.verifyToken}`;
+            //     await authService.register({user}, linkVerify)
+            //     .then((message) => {
+            //         req.flash("success", message);
+            //         res.redirect('/login');
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
             // }).catch((err) => {
             //     console.log(err);
             // });
         } catch (err) {
+            console.info("===========[] ===========[err] : ",err);
             req.flash("errors", err);
-            res.render('/register', {
+            res.render('auth/register.ejs', {
                 oldData: req.body
             });
         }
@@ -47,6 +55,51 @@ let postRegister = async (req, res) => {
             if (err.param === 'rg_password_again') errPasswordConfirm = err.msg;
         });
         res.render("auth/register", {
+            errEmail: errEmail,
+            errPassword: errPassword,
+            errPasswordConfirm: errPasswordConfirm,
+            hasErrors: hasErrors,
+            oldData: req.body
+        })
+    }
+};
+let postApiRegister = async (req, res) => {
+    let hasErrors = validationResult(req).array({
+        onlyFirstError: true
+    });
+    if (!hasErrors.length) {
+        try {
+            let user = req.body;
+            console.info("===========[postRegister] ===========[user] : ",user);
+            await authService.register().then(async (user) => {
+                console.log(user);
+                res.redirect('login');
+                let linkVerify = `${req.protocol}://${req.get("host")}/verify/${user.local.verifyToken}`;
+                await authService.register({user}, linkVerify)
+                .then((message) => {
+                    res.status(200).json(user);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+        } catch (err) {
+            // req.flash("errors", err);
+            // res.render('/register', {
+            //     oldData: req.body
+            // });
+            res.status(500).json(err);
+        }
+    } else {
+        let errEmail = '', errPassword = '', errPasswordConfirm = '';
+        hasErrors.forEach((err) => {
+            if (err.param === 'rg_email') errEmail = err.msg;
+            if (err.param === 'rg_password') errPassword = err.msg;
+            if (err.param === 'rg_password_again') errPasswordConfirm = err.msg;
+        });
+        res.render("auth/register.ejs", {
             errEmail: errEmail,
             errPassword: errPassword,
             errPasswordConfirm: errPasswordConfirm,
@@ -95,6 +148,7 @@ module.exports = {
     getLogin: getLogin,
     getRegister: getRegister,
     postRegister: postRegister,
+    postApiRegister: postApiRegister,
     verifyAccount: verifyAccount,
     getLogout: getLogout,
     checkLoggedIn: checkLoggedIn,
