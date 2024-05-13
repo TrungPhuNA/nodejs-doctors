@@ -170,6 +170,7 @@ let createNewPatient = (data) => {
                     time: data.timeBooking
                 },
             }).then(async (schedule) => {
+				console.log("schedule------> ", schedule);
                 if (schedule && schedule.sumBooking < schedule.maxBooking) {
                     let patient = await db.Patient.create(data);
                     data.patientId = patient.id;

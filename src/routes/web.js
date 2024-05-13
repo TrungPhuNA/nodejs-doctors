@@ -6,6 +6,7 @@ import doctor from "./../controllers/doctorController";
 import supporter from "./../controllers/supporterController";
 import clinic from "./../controllers/clinicController";
 import bot from "./../controllers/botFBController";
+import doctorController from "./../controllers/dataControllers/doctorController";
 import passport from "passport";
 import passportLocal from 'passport-local';
 import userService from "./../services/userService";
@@ -62,7 +63,13 @@ passport.deserializeUser((id, done) => {
 let initRoutes = (app) => {
     router.get("/all-clinics", home.getPageAllClinics);
     router.get("/all-doctors", home.getPageAllDoctors);
+
+	/*Danh sách api*/
     router.get("/api/v1/doctors", home.getPageAllDoctorsApi);
+    router.get("/api/v1/doctor/show/:id", doctorController.showDoctor);
+	/******************************************************/
+
+
     router.get("/all-specializations", home.getPageAllSpecializations);
 
     router.get('/webhook', bot.getWebhookFB);

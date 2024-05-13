@@ -1,327 +1,882 @@
 <% extend("../app.ejs") %>
-<section class="detail-nav">
-    <div class="container">
-        <div class="container">
-            <div class="row">
-                <div class="col-2">
-                    <div class="menu-title text-decoration-none">
-                        <a href="/" class="text-decoration-none">
-                            <img class="menu-nav" src="/images/background/smile.png" alt="img logo">
-                            <span class="text-decoration-none">Doctors care</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-8 d-flex flex-row justify-content-center align-self-center menu-type">
-                    <span class="d-block"><a href="/" class="text-decoration-none">Homepage</a></span>
-                    <span class="d-block mx-5"><a href="/for-patients" class="text-decoration-none">For patients</a></span>
-                    <span class="d-block"><a href="/for-doctors" class="text-decoration-none">For doctors</a></span>
-                </div>
-                <div class="col-2 d-flex justify-content-center align-items-center">
-                    <span><a href=" https://www.youtube.com/channel/UCHqJxLo7mKam9GKqqwr2wfA?sub_confirmation=1" target="_blank" class="text-decoration-none">Need support?</a></span>
-                </div>
-            </div>
-        </div>
-    </div>
+	<section class="detail-nav">
+		<div class="container">
+			<div class="container">
+				<div class="row">
+					<div class="col-2">
+						<div class="menu-title text-decoration-none">
+							<a href="/" class="text-decoration-none">
+								<img class="menu-nav" src="/images/background/smile.png" alt="img logo">
+								<span class="text-decoration-none">Doctors care</span>
+							</a>
+						</div>
+					</div>
+					<div class="col-8 d-flex flex-row justify-content-center align-self-center menu-type">
+						<span class="d-block"><a href="/" class="text-decoration-none">Homepage</a></span>
+						<span class="d-block mx-5"><a href="/for-patients" class="text-decoration-none">For
+								patients</a></span>
+						<span class="d-block"><a href="/for-doctors" class="text-decoration-none">For doctors</a></span>
+					</div>
+					<div class="col-2 d-flex justify-content-center align-items-center">
+						<span><a href=" https://www.youtube.com/channel/UCHqJxLo7mKam9GKqqwr2wfA?sub_confirmation=1"
+								target="_blank" class="text-decoration-none">Need support?</a></span>
+					</div>
+				</div>
+			</div>
+		</div>
 
-</section>
-<section class="detail-info-doctor">
-    <div class="container">
-        <div class="container">
-            <div class="row">
-                <div class="col-2">
-                    <img src="/images/users/<%= doctor.avatar %>" class="avatar-doctor" alt="doctor avatar">
-                </div>
-                <div class="col-9 info-doctor">
-                    <div><span class="name-doctor"><%= doctor.name %></span></div>
-                    <div>Specialist: <span><%= specialization.name %></span></div>
-                    <div class="mt-2">
-                        <a href="/feedback/<%=doctor.id%>" class="btn-feedback text-decoration-none">Send comments after going to the doctor</a>
-                    </div>
-                </div>
+	</section>
+	<div class="doctor-detail-page" id="doctor-detail-page">
+		<!-- <section class="detail-info-doctor">
+			<div class="container">
+				<div class="container">
+					<div class="row">
+						<div class="col-2">
+							<img src="/images/users/<%= doctor.avatar %>" class="avatar-doctor" alt="doctor avatar">
+						</div>
+						<div class="col-9 info-doctor">
+							<div><span class="name-doctor">
+									<%= doctor.name %>
+								</span></div>
+							<div>Specialist: <span>
+									<%= specialization.name %>
+								</span></div>
+							<div class="mt-2">
+								<a href="/feedback/<%=doctor.id%>" class="btn-feedback text-decoration-none">Send comments
+									after going to the doctor</a>
+							</div>
+						</div>
+	
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="detail-content">
+			<div class="container">
+				<div class="container">
+					<div class="row">
+						<div class="col-7">
+							<div class="content-doctor">
+								<% if(postDoctor) { %>
+									<%- postDoctor.contentHTML %>
+										<% } %>
+							</div>
+							<div>
+								<br>
+								<% if( doctor.Comments.length> 0){%>
+									<div class="title-feedback">Patients response:</div>
+	
+									<% doctor.Comments.forEach(function(cmt) { %>
+										<div class="comment mt-3 d-flex flex-column">
+											<div class="d-flex flex-row">
+												<div><strong>
+														<%= cmt.name%>
+													</strong></div>
+												<div class="ml-3 " style="color: #0056b3">(Date and time of examination) <%=
+														cmt.dateBooking%> - <%=cmt.timeBooking%>
+												</div>
+											</div>
+											<div>
+												<span>
+													<%= cmt.content %>
+												</span>
+											</div>
+										</div>
+										<%})%>
+											<br>
+											<%}%>
+	
+							</div>
+						</div>
+						<div class="col-5  description">
+							<div class="d-flex flex-column h-100">
+								<div class="doctor-text-book">
+									<div class="row header-booking">
+										<label for="day-book" class="label-booking">SCHEDULE EXAMINATION</label>
+									</div>
+									<select id="day-book" class="form-control" data-doctor="<%= doctor.id %>">
+										<% sevenDaySchedule.forEach(function(day) { %>
+											<option value="<%= day %>">
+												<%= day %>
+											</option>
+											<% }) %>
+	
+									</select>
+								</div>
+								<div id="div-schedule-id"
+									class="doctor-schedule d-flex flex-row  flex-wrap text-decoration-none">
+									<% if(doctor.Schedules.length===0){ %>
+										<div>
+											Doctor "<%= doctor.name %>" does not have an appointment on
+												<b>
+													<%= sevenDaySchedule[0] %>
+												</b>. Please select the next examination schedule.
+										</div>
+										<% } %>
+											<% doctor.Schedules.forEach( function(x, index) { %>
+												<% if(x.getDataValue("isDisable")===false) { %>
+													<div id="btn-modal-<%= x.id %>" data-doctorId="<%= doctor.id %>"
+														data-date="<%= x.date %>" data-time="<%= x.time %>"
+														class="text-decoration-none" onclick="openModalBooking(this.id)">
+														<div class="doctor-time">
+															<%= x.time %>
+														</div>
+													</div>
+													<% } %>
+	
+														<% if( index===doctor.Schedules.length - 1 &&
+															x.getDataValue("isDisable")===true){%>
+															<div>
+																There are no scheduled visits in the current timeframe.
+																Please select the next scheduled exams.
+															</div>
+															<%}%>
+																<% }) %>
+	
+								</div>
+								<div id="div-more-info">
+									<% if(doctor.Schedules.length> 0){ %>
+										<div class="d-flex flex-column">
+											<div>
+												<span class="d-block mt-2"> Choose <i class="fa fa-hand-o-up"
+														aria-hidden="true"></i> and book a free consultation</span>
+											</div>
+											<div style="border-top: 1px solid #ccc" class="d-flex flex-column">
+												<span class="d-block pt-3 pb-1" style="text-transform: uppercase">Medical
+													address:</span>
+												<span class="d-block pb-1" style="border-bottom: 1px solid #ccc">
+													<%= doctor.address %>
+												</span>
+											</div>
+											<span class="d-block pt-2">Price: 50 USD</span>
+										</div>
+										<% } %>
+								</div>
+							</div>
+							<div class="clinic-address">
+								Medical address:
+							</div>
+							<div id="myMap" class="bing-map">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	
+		<input hidden type="text" id="doctorAddress" value="<%= clinic.address %>">
+	
+		<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+			id="modalBooking">
+			<div class="modal-dialog mw-100 w-75" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Make a medical appointment</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-5" style="border-right: 1px solid #ccc;" id="infoDoctor"
+								data-doctor-id="<%= doctor.id %>">
+								<label class="text-label" style="padding-top: 7px">Doctor information:</label>
+								<div class="d-flex flex-row">
+									<img class="avatar-doctor-modal" src="/images/users/<%= doctor.avatar %>">
+									<div class="ml-3">
+										<span class="d-block">
+											<%= doctor.name %>
+										</span>
+										<div class="time-booking" id="time-patient-booking"></div>
+										<div class="time-booking" id="date-patient-booking"></div>
+									</div>
+								</div>
+	
+								<div class="mt-4">
+									<%= clinic.address %>
+								</div>
+								<div class="mt-3">Free appointment appointment</div>
+								<div class="mt-3">Price: 50 USD</div>
+	
+							</div>
+							<div class="col-7">
+								<form id="form-patient-info">
+									<div class="form-group">
+										<label for="patient-name" class="col-form-label text-label">Patient
+											information:</label>
+										<input type="text" class="form-control" id="name" name="name"
+											placeholder="Full name">
+										<div class="invalid-feedback">
+											Patient names cannot be left blank
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="gender" id="selectMale"
+												value="male" checked>
+											<label class="form-check-label" for="selectMale">Male</label>
+										</div>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="gender" id="selectFemale"
+												value="female">
+											<label class="form-check-label" for="selectFemale">Female</label>
+										</div>
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" id="phone" name="phone"
+											placeholder="Phone number (*)">
+										<div class="invalid-feedback"> Invalid phone number</div>
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" id="email" name="email"
+											placeholder="Email (*)">
+										<div class="invalid-feedback">
+											Invalid email
+										</div>
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" id="year" name="year" placeholder="Year">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" id="address" name="address"
+											placeholder="Address">
+									</div>
+									<div class="form-group">
+										<label for="description" class="col-form-label">Reason for examination:</label>
+										<textarea class="form-control" id="description" name="description"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="extraInfo" class="col-form-label">Additional information (optional)
+											<span id="viewExtraInfo" class="view viewExtraInfo">(View): </span> </label>
+										<div class="extraInfo d-none" id="divExtraInfo">
+											<textarea class="form-control" id="breath"
+												placeholder="Respiratory history note (if applicable)"
+												name="breath"></textarea>
+											<div class="form-group">
+												<label class="mt-2 col-form-label w-100">Have ever visited at (since the
+													last 15 days):</label>
+	
+												<% places.forEach(function(place) { %>
+													<div class="form-check form-check-inline">
+														<input class="form-check-input" type="radio" name="places"
+															id="selectPlace<%= place.id %>" value="<%= place.id %>">
+														<label class="form-check-label" for="selectPlace<%= place.id %>">
+															<%= place.name %>
+														</label>
+													</div>
+													<% }) %>
+														<div class="form-check form-check-inline">
+															<input class="form-check-input" type="radio" name="places"
+																id="selectNone" value="none" checked>
+															<label class="form-check-label" for="selectNone">Never
+																visited</label>
+														</div>
+	
+														<div class="mt-3">
+															<label>There are prior examinations:</label>
+															<div class="d-flex ">
+																<label class="mr-2" for="oldForms">Upload images: </label>
+																<input name="oldForms" id="oldForms" type="file"
+																	accept="image/*" multiple>
+															</div>
+															<textarea class="form-control mt-2" id="extraOldForms"
+																placeholder="Additional information, if any (doctor, place of examination, etc.)"
+																name="extraOldForms"></textarea>
+														</div>
+											</div>
+	
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div id="processLoading" class="process-loading d-none"> <span class="d-block mx-2">
+								<strong>Processing</strong></span>
+							<div class="loader"></div>
+						</div>
+						<button type="button" class="ml-3 btn btn-secondary" data-dismiss="modal">Cancle</button>
+						<button type="button" class="btn btn-primary" id="btn-confirm-booking">Confirm medical
+							appointment</button>
+					</div>
+				</div>
+			</div>
+		</div> -->
 
-            </div>
-        </div>
-    </div>
-</section>
-<section class="detail-content">
-    <div class="container">
-        <div class="container">
-            <div class="row">
-                <div class="col-7">
-                    <div class="content-doctor">
-                        <% if(postDoctor) { %>
-                            <%- postDoctor.contentHTML %>
-                        <% } %>
-                    </div>
-                    <div>
-                        <br>
-                        <% if( doctor.Comments.length > 0){%>
-                            <div class="title-feedback">Patients response:</div>
+	</div>
+	<script>
+		var map, searchManager;
 
-                            <% doctor.Comments.forEach(function(cmt) { %>
-                                <div class="comment mt-3 d-flex flex-column">
-                                    <div class="d-flex flex-row">
-                                        <div><strong><%= cmt.name%></strong></div>
-                                        <div  class="ml-3 " style="color: #0056b3">(Date and time of examination) <%= cmt.dateBooking%> - <%=cmt.timeBooking%></div>
-                                    </div>
-                                    <div>
-                                        <span><%= cmt.content %></span>
-                                    </div>
-                                </div>
-                            <%})%>
-                            <br>
-                        <%}%>
+		console.log( window.location );
+		let host = window.location.origin;
+		let pathName = window.location.pathname.split( '/' );
+		let id = pathName[ pathName.length - 1 ];
+		const doctor_detail = $( '#doctor-detail-page' );
 
-                    </div>
-                </div>
-                <div class="col-5  description">
-                    <div class="d-flex flex-column h-100">
-                        <div class="doctor-text-book">
-                            <div class="row header-booking">
-                                <label for="day-book" class="label-booking">SCHEDULE EXAMINATION</label>
-                            </div>
-                            <select id="day-book" class="form-control" data-doctor="<%= doctor.id %>">
-                                <% sevenDaySchedule.forEach(function(day) { %>
-                                    <option value="<%= day %>"><%= day %></option>
-                                <% }) %>
+		document.addEventListener( 'DOMContentLoaded', function ()
+		{
+			console.log( "load---------->" );
+			let fetchData = ( host, id ) =>
+			{
+				let notFount = `
+				<section class="detail-info-clinic mt-3">
+					<div class="container">
+						<div class="container">
+							<div class="row">
+								<div class="col-8 mx-auto">
+									<h2>404 Page not found!</h2>
+									<hr>
+									<div>
+									<a href="/">Back to Homepage</a>
+									</div>
 
-                            </select>
-                        </div>
-                        <div id="div-schedule-id"
-                             class="doctor-schedule d-flex flex-row  flex-wrap text-decoration-none">
-                            <% if(doctor.Schedules.length === 0){ %>
-                                <div>
-                                    Doctor "<%= doctor.name %>" does not have an appointment on
-                                    <b><%= sevenDaySchedule[0] %></b>. Please select the next examination schedule.
-                                </div>
-                            <% } %>
-                                <% doctor.Schedules.forEach( function(x, index) { %>
-                                    <% if(x.getDataValue("isDisable") === false) { %>
-                                        <div id="btn-modal-<%= x.id %>" data-doctorId="<%= doctor.id %>"
-                                             data-date="<%= x.date %>"
-                                             data-time="<%= x.time %>"
-                                             class="text-decoration-none" onclick="openModalBooking(this.id)">
-                                            <div class="doctor-time">
-                                                <%= x.time %>
-                                            </div>
-                                        </div>
-                                    <% } %>
+								</div>
+							</div>
+						</div>
+					</div>
+			</section>
+			`;
+				fetch( `${ host }/api/v1/doctor/show/${ id }` )
+					.then( response => response.json() )
+					.then( response =>
+					{
+						if ( response?.status == "success" && response?.data )
+						{
+							let doctor = response?.data?.doctor;
+							let specialization = response?.data?.specialization;
+							let sevenDaySchedule = response?.data?.sevenDaySchedule;
+							let postDoctor = response?.data?.postDoctor;
+							let places = response?.data?.places;
+							let clinic = response?.data?.clinic;
 
-                                    <% if( index === doctor.Schedules.length - 1 && x.getDataValue("isDisable") === true){%>
-                                            <div>
-                                                There are no scheduled visits in the current timeframe. Please select the next scheduled exams.
-                                            </div>
-                                        <%}%>
-                                <% }) %>
+							let dataHtml = `<div id="doctor-detail-page">
+	<section class="detail-info-doctor">
+		<div class="container">
+			<div class="container">
+				<div class="row">
+					<div class="col-2">
+						<img src="/images/users/${ doctor.avatar }" class="avatar-doctor" alt="doctor avatar">
+					</div>
+					<div class="col-9 info-doctor">
+						<div><span class="name-doctor">${ doctor?.name || '' }</span></div>
+						<div>Specialist: <span>${ specialization?.name || '' }</span></div>
+						<div class="mt-2">
+							<a href="/feedback/${ doctor.id }" class="btn-feedback text-decoration-none">Send comments after going to the doctor</a>
+						</div>
+					</div>
+	
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="detail-content">
+		<div class="container">
+			<div class="container">
+				<div class="row">
+					<div class="col-7">
+						<div class="content-doctor" id="content-doctor">
+						
+					</div>
+						<div>
+							<br>
+							${ doctor?.Comments.length > 0 ? '<div class="title-feedback">Patients response:</div>'
+									+ doctor.Comments.map( function ( cmt )
+									{
+										return `
+								<div class="comment mt-3 d-flex flex-column">
+										<div class="d-flex flex-row">
+											<div><strong>${ cmt.name }</strong></div>
+											<div  class="ml-3 " style="color: #0056b3">(Date and time of examination) 
+												${ cmt.dateBooking + ' - ' + cmt.timeBooking }</div>
+										</div>
+										<div>
+											<span>${ cmt.content }</span>
+										</div>
+									</div>
+								`
+									} ) + '<br>' : '' }
+						</div>
+					</div>
+					<div class="col-5  description">
+						<div class="d-flex flex-column h-100">
+							<div class="doctor-text-book">
+								<div class="row header-booking">
+									<label for="day-book" class="label-booking">SCHEDULE EXAMINATION</label>
+								</div>
+								<select id="day-book" class="form-control" data-doctor="${ doctor.id }">
+									${ sevenDaySchedule.map( function ( day )
+									{
+										return `<option value="${ day }">${ day }</option>`
+									} ) }
+								</select>
+							</div>
+							<div id="div-schedule-id"
+								 class="doctor-schedule d-flex flex-row  flex-wrap text-decoration-none">
+								 ${ doctor?.Schedules.length == 0 ? `<div>
+										Doctor "${ doctor.name }" does not have an appointment on
+										<b>${ sevenDaySchedule[ 0 ] }</b>. Please select the next examination schedule.
+									</div>`: doctor.Schedules.map( function ( x, index )
+									{
 
-                        </div>
-                        <div id="div-more-info">
-                            <% if(doctor.Schedules.length > 0){ %>
-                                <div class="d-flex flex-column">
-                                    <div>
-                                                <span class="d-block mt-2"> Choose <i class="fa fa-hand-o-up" aria-hidden="true"></i>  and book a free consultation</span>
-                                    </div>
-                                    <div style="border-top: 1px solid #ccc"
-                                         class="d-flex flex-column">
-                                                            <span class="d-block pt-3 pb-1"
-                                                                  style="text-transform: uppercase">Medical address:</span>
-                                        <span class="d-block pb-1"
-                                              style="border-bottom: 1px solid #ccc"><%= doctor.address %></span>
-                                    </div>
-                                    <span class="d-block pt-2">Price: 50 USD</span>
-                                </div>
-                            <% } %>
-                        </div>
-                    </div>
-                    <div class="clinic-address">
-                        Medical address:
-                    </div>
-                    <div id="myMap" class="bing-map">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+										if ( !x?.isDisable )
+										{
+											return `<div id="btn-modal-${ x.id }" data-doctorId="${ doctor.id }"
+														data-date="${ x.date }"
+														data-time="${ x.time }"
+														class="text-decoration-none" onclick="openModalBooking('btn-modal-${ x.id }')">
+														<div class="doctor-time">
+															${ x.time }
+														</div>
+													</div>`
+										}
+										if ( index == doctor.Schedules.length - 1 && x.isDisable )
+										{
+											return `<div>
+																There are no scheduled visits in the current timeframe. Please select the next scheduled exams.
+															</div>`
+										}
+										return ''
+									}
+									)
+								}
 
-<input hidden type="text" id="doctorAddress" value="<%= clinic.address %>">
+									${ ""
+								// 	doctor.Schedules.length > 0 ? doctor.Schedules.forEach( function ( x, index )
+								// 	{
+								// 		console.log( x.time );
+								// 		if ( !x.isDisable )
+								// 		{
+								// 			return `<div id="btn-modal-${ x.id }" data-doctorId="${ x }"
+								// 								data-date="${ x.date }"
+								// 								data-time="${ x.time }"
+								// 								class="text-decoration-none" onclick="openModalBooking(${ doctor.id })">
+								// 								<div class="doctor-time">
+								// 									${ x.time }
+								// 								</div>
+								// 							</div>`
+								// 		}
 
-<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
-     id="modalBooking">
-    <div class="modal-dialog mw-100 w-75" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Make a medical appointment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-5" style="border-right: 1px solid #ccc;" id="infoDoctor"
-                         data-doctor-id="<%= doctor.id %>">
-                        <label class="text-label" style="padding-top: 7px">Doctor information:</label>
-                        <div class="d-flex flex-row">
-                            <img class="avatar-doctor-modal" src="/images/users/<%= doctor.avatar %>">
-                            <div class="ml-3">
-                                <span class="d-block"><%= doctor.name %></span>
-                                <div class="time-booking" id="time-patient-booking"></div>
-                                <div class="time-booking" id="date-patient-booking"></div>
-                            </div>
-                        </div>
+								// 		return ''
+								// 	}
+								// ) : '' 
+								}
+	
+							</div>
+							<div id="div-more-info">
+								${ doctor.Schedules.length > 0 ?
+									`<div class="d-flex flex-column">
+										<div>
+													<span class="d-block mt-2"> Choose <i class="fa fa-hand-o-up" aria-hidden="true"></i>  and book a free consultation</span>
+										</div>
+										<div style="border-top: 1px solid #ccc"
+											 class="d-flex flex-column">
+																<span class="d-block pt-3 pb-1"
+																	  style="text-transform: uppercase">Medical address:</span>
+											<span class="d-block pb-1"
+												  style="border-bottom: 1px solid #ccc">${ doctor.address }</span>
+										</div>
+										<span class="d-block pt-2">Price: 50 USD</span>
+									</div>` : '' }
+							</div>
+						</div>
+						<div class="clinic-address">
+							Medical address:
+						</div>
+						<div id="myMap" class="bing-map">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<input hidden type="text" id="doctorAddress" value="${ clinic.address }">
+	
+	<div class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+		 id="modalBooking">
+		<div class="modal-dialog mw-100 w-75" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Make a medical appointment</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-5" style="border-right: 1px solid #ccc;" id="infoDoctor"
+							 data-doctor-id="${ doctor.id }">
+							<label class="text-label" style="padding-top: 7px">Doctor information:</label>
+							<div class="d-flex flex-row">
+								<img class="avatar-doctor-modal" src="/images/users/${ doctor.avatar }">
+								<div class="ml-3">
+									<span class="d-block">${ doctor.name }</span>
+									<div class="time-booking" id="time-patient-booking"></div>
+									<div class="time-booking" id="date-patient-booking"></div>
+								</div>
+							</div>
+	
+							<div class="mt-4">
+								${ clinic.address }
+							</div>
+							<div class="mt-3">Free appointment appointment</div>
+							<div class="mt-3">Price: 50 USD</div>
+	
+						</div>
+						<div class="col-7">
+							<form id="form-patient-info">
+								<div class="form-group">
+									<label for="patient-name" class="col-form-label text-label">Patient information:</label>
+									<input type="text" class="form-control" id="name" name="name"
+										   placeholder="Full name">
+									<div class="invalid-feedback">
+										Patient names cannot be left blank
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="gender"
+											   id="selectMale" value="male" checked>
+										<label class="form-check-label" for="selectMale">Male</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="gender"
+											   id="selectFemale" value="female">
+										<label class="form-check-label" for="selectFemale">Female</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" id="phone" name="phone"
+										   placeholder="Phone number (*)">
+									<div class="invalid-feedback"> Invalid phone number</div>
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" id="email" name="email" placeholder="Email (*)">
+									<div class="invalid-feedback">
+										Invalid email
+									</div>
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" id="year" name="year" placeholder="Year">
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control" id="address" name="address"
+										   placeholder="Address">
+								</div>
+								<div class="form-group">
+									<label for="description" class="col-form-label">Reason for examination:</label>
+									<textarea class="form-control" id="description" name="description"></textarea>
+								</div>
+								<div class="form-group">
+									<label for="extraInfo" class="col-form-label">Additional information (optional)
+										<span id="viewExtraInfo" class="view viewExtraInfo" onclick="showExtraInfoBooking()">(View): </span> </label>
+									<div class="extraInfo d-none" id="divExtraInfo">
+										 <textarea class="form-control" id="breath"
+												   placeholder="Respiratory history note (if applicable)"
+												   name="breath"></textarea>
+										<div class="form-group">
+											<label class="mt-2 col-form-label w-100">Have ever visited at (since the last 15 days):</label>
+	
+											${ places.forEach( function ( place )
+									{
+										return `<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="places"
+														id="selectPlace${ place.id }" value="${ place.id }">
+													<label class="form-check-label"
+														for="selectPlace${ place.id }">${ place.name }</label>
+												</div>`
+									} ) }
+											<div class="form-check form-check-inline">
+												<input class="form-check-input" type="radio" name="places"
+													   id="selectNone" value="none" checked>
+												<label class="form-check-label" for="selectNone">Never visited</label>
+											</div>
+	
+											<div class="mt-3">
+												<label>There are prior examinations:</label>
+												<div class="d-flex ">
+													<label class="mr-2" for="oldForms">Upload images: </label>
+													<input name="oldForms" id="oldForms" type="file" accept="image/*"
+														   multiple>
+												</div>
+												<textarea class="form-control mt-2" id="extraOldForms"
+														  placeholder="Additional information, if any (doctor, place of examination, etc.)"
+														  name="extraOldForms"></textarea>
+											</div>
+										</div>
+	
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div id="processLoading" class="process-loading d-none"> <span class="d-block mx-2"> <strong>Processing</strong></span><div class="loader"></div> </div>
+					<button type="button" class="ml-3 btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="btn-confirm-booking" onclick="submit()">Confirm medical appointment</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>`
+							doctor_detail.append( dataHtml );
+							if ( postDoctor )
+							{
+								document.getElementById( "content-doctor" ).innerHTML = postDoctor.contentHTML
+							}
 
-                        <div class="mt-4">
-                            <%= clinic.address %>
-                        </div>
-                        <div class="mt-3">Free appointment appointment</div>
-                        <div class="mt-3">Price: 50 USD</div>
 
-                    </div>
-                    <div class="col-7">
-                        <form id="form-patient-info">
-                            <div class="form-group">
-                                <label for="patient-name" class="col-form-label text-label">Patient information:</label>
-                                <input type="text" class="form-control" id="name" name="name"
-                                       placeholder="Full name">
-                                <div class="invalid-feedback">
-                                    Patient names cannot be left blank
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender"
-                                           id="selectMale" value="male" checked>
-                                    <label class="form-check-label" for="selectMale">Male</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender"
-                                           id="selectFemale" value="female">
-                                    <label class="form-check-label" for="selectFemale">Female</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="phone" name="phone"
-                                       placeholder="Phone number (*)">
-                                <div class="invalid-feedback"> Invalid phone number</div>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="email" name="email" placeholder="Email (*)">
-                                <div class="invalid-feedback">
-                                    Invalid email
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="year" name="year" placeholder="Year">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="address" name="address"
-                                       placeholder="Address">
-                            </div>
-                            <div class="form-group">
-                                <label for="description" class="col-form-label">Reason for examination:</label>
-                                <textarea class="form-control" id="description" name="description"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="extraInfo" class="col-form-label">Additional information (optional)
-                                    <span id="viewExtraInfo" class="view viewExtraInfo">(View): </span> </label>
-                                <div class="extraInfo d-none" id="divExtraInfo">
-                                     <textarea class="form-control" id="breath"
-                                               placeholder="Respiratory history note (if applicable)"
-                                               name="breath"></textarea>
-                                    <div class="form-group">
-                                        <label class="mt-2 col-form-label w-100">Have ever visited at (since the last 15 days):</label>
+						} else
+						{
+							doctor_detail.append( notFount );
+						}
+					} )
+					.catch( error =>
+					{
+						console.error( 'Error fetching data:', error );
+						doctor_detail.append( notFount );
+					} );
+			}
+			fetchData( host, id );
+		} )
 
-                                        <% places.forEach(function(place) { %>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="places"
-                                                   id="selectPlace<%= place.id %>" value="<%= place.id %>">
-                                            <label class="form-check-label"
-                                                   for="selectPlace<%= place.id %>"><%= place.name %></label>
-                                        </div>
-                                        <% }) %>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="places"
-                                                   id="selectNone" value="none" checked>
-                                            <label class="form-check-label" for="selectNone">Never visited</label>
-                                        </div>
+		function submit ()
+		{
+			let check = validateInputPageDoctor();
+			if ( check )
+			{
+				$( this ).prop( 'disabled', true );
+				$( '#processLoading' ).removeClass( 'd-none' );
+				let formData = new FormData( $( 'form#form-patient-info' )[ 0 ] );
+				//contain file upload
+				let doctorId = $( '#infoDoctor' ).data( 'doctor-id' );
+				let time = $( '#time-patient-booking' ).text();
+				let date = $( '#date-patient-booking' ).text();
 
-                                        <div class="mt-3">
-                                            <label>There are prior examinations:</label>
-                                            <div class="d-flex ">
-                                                <label class="mr-2" for="oldForms">Upload images: </label>
-                                                <input name="oldForms" id="oldForms" type="file" accept="image/*"
-                                                       multiple>
-                                            </div>
-                                            <textarea class="form-control mt-2" id="extraOldForms"
-                                                      placeholder="Additional information, if any (doctor, place of examination, etc.)"
-                                                      name="extraOldForms"></textarea>
-                                        </div>
-                                    </div>
+				if ( $( '#oldForms' ).val() )
+				{
+					formData.append( "doctorId", doctorId );
+					formData.append( 'timeBooking', time );
+					formData.append( 'dateBooking', date );
+					handleBookingPageDoctorNormal( formData );
+				} else
+				{
 
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div id="processLoading" class="process-loading d-none"> <span class="d-block mx-2"> <strong>Processing</strong></span><div class="loader"></div> </div>
-                <button type="button" class="ml-3 btn btn-secondary" data-dismiss="modal">Cancle</button>
-                <button type="button" class="btn btn-primary" id="btn-confirm-booking">Confirm medical appointment</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    var map, searchManager;
-    function GetMap() {
-        map = new Microsoft.Maps.Map('#myMap', {
-            credentials: 'AgOTudEefMLV68arfE7ea5Yx_ZNEQUrF-prgC0JeOJJk8EbOGZUHkpMaIYFDNld4',
-        });
+					let data = {
+						doctorId: doctorId,
+						timeBooking: time,
+						dateBooking: date,
+					};
+					for ( let pair of formData.entries() )
+					{
+						data[ pair[ 0 ] ] = pair[ 1 ]
+					}
+					delete data.oldForms;
+					handleBookingPageDoctorWithoutFiles( data );
+				}
+			}
+		}
 
-        //Make a request to geocode New York, NY.
-        geocodeQuery($('#doctorAddress').val());
-    }
+		// function handleBookingPageDoctorNormal ( formData )
+		// {
+		// 	console.log(formData);
+		// 	$.ajax( {
+		// 		method: "POST",
+		// 		url: `${ window.location.origin }/booking-doctor-normal/create`,
+		// 		data: formData,
+		// 		cache: false,
+		// 		contentType: false,
+		// 		processData: false,
+		// 		success: function ( data )
+		// 		{
+		// 			console.log(data);
+		// 			// if ( typeof ( data.patient ) === 'string' )
+		// 			// {
+		// 			// 	alert( "Unfortunately, this appointment has enough patients booked, please choose a different time." );
+		// 			// 	// window.location.reload( true );
+		// 			// } else
+		// 			// {
+		// 			// 	window.location.href = `${ window.location.origin }/booking-info/${ data.patient.id }`;
+		// 			// }
+		// 		},
+		// 		error: function ( error )
+		// 		{
+		// 			alertify.error( 'An error occurs, please try again later!' );
+		// 			console.log( error );
+		// 		}
+		// 	} );
+		// }
 
-    function geocodeQuery(query) {
-        //If search manager is not defined, load the search module.
-        if (!searchManager) {
-            //Create an instance of the search manager and call the geocodeQuery function again.
-            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function() {
-                searchManager = new Microsoft.Maps.Search.SearchManager(map);
-                geocodeQuery(query);
-            });
-        } else {
-            var searchRequest = {
-                where: query,
-                callback: function(r) {
-                    //Add the first result to the map and zoom into it.
-                    if (r && r.results && r.results.length > 0) {
-                        var pin = new Microsoft.Maps.Pushpin(r.results[0].location, {
-                            title: $('#doctorAddress').val(),
-                            color: 'red'
-                        });
+		// function handleBookingPageDoctorWithoutFiles ( data )
+		// {
+		// 	console.log(data);
+		// 	$.ajax( {
+		// 		method: "POST",
+		// 		url: `${ window.location.origin }/booking-doctor-without-files/create`,
+		// 		data: data,
+		// 		success: function ( data )
+		// 		{
+		// 			console.log(data);
+		// 			// if ( typeof ( data.patient ) === 'string' )
+		// 			// {
+		// 			// 	alert( "Unfortunately, this appointment has enough patients booked, please choose a different time." );
+		// 			// 	// window.location.reload( true );
+		// 			// } else
+		// 			// {
+		// 			// 	window.location.href = `${ window.location.origin }/booking-info/${ data.patient.id }`;
+		// 			// }
 
-                        map.entities.push(pin);
-                        map.setView({ bounds: r.results[0].bestView });
-                    }
-                },
-                errorCallback: function(e) {
-                    //If there is an error, alert the user about it.
-                    // alert("No results found.");
-                }
-            };
+		// 		},
+		// 		error: function ( error )
+		// 		{
+		// 			alert.error( 'An error occurs, please try again later!' );
+		// 			console.log( error );
+		// 		}
+		// 	} );
+		// }
 
-            //Make the geocode request.
-            searchManager.geocode(searchRequest);
-        }
-    }
+		function GetMap ()
+		{
+			map = new Microsoft.Maps.Map( '#myMap', {
+				credentials: 'AgOTudEefMLV68arfE7ea5Yx_ZNEQUrF-prgC0JeOJJk8EbOGZUHkpMaIYFDNld4',
+			} );
 
-    function openModalBooking(id) {
-        let time = $(`#${id}`).data('time');
-        let date = $(`#${id}`).data('date');
-        $('#time-patient-booking').text(time);
-        $('#date-patient-booking').text(date)
-        $('#modalBooking').modal('show');
-    }
-</script>
+			//Make a request to geocode New York, NY.
+			geocodeQuery( $( '#doctorAddress' ).val() );
+		}
+
+		function geocodeQuery ( query )
+		{
+			//If search manager is not defined, load the search module.
+			if ( !searchManager )
+			{
+				//Create an instance of the search manager and call the geocodeQuery function again.
+				Microsoft.Maps.loadModule( 'Microsoft.Maps.Search', function ()
+				{
+					searchManager = new Microsoft.Maps.Search.SearchManager( map );
+					geocodeQuery( query );
+				} );
+			} else
+			{
+				var searchRequest = {
+					where: query,
+					callback: function ( r )
+					{
+						//Add the first result to the map and zoom into it.
+						if ( r && r.results && r.results.length > 0 )
+						{
+							var pin = new Microsoft.Maps.Pushpin( r.results[ 0 ].location, {
+								title: $( '#doctorAddress' ).val(),
+								color: 'red'
+							} );
+
+							map.entities.push( pin );
+							map.setView( { bounds: r.results[ 0 ].bestView } );
+						}
+					},
+					errorCallback: function ( e )
+					{
+						//If there is an error, alert the user about it.
+						// alert("No results found.");
+					}
+				};
+
+				//Make the geocode request.
+				searchManager.geocode( searchRequest );
+			}
+		}
+
+
+
+		function showExtraInfoBooking ()
+		{
+			console.log( "jashdjkashdjkasdhjka" );
+			$( '#viewExtraInfo' ).on( 'click', function ( e )
+			{
+				console.log( "e-------> ", e );
+				if ( $( "#divExtraInfo" ).hasClass( "d-none" ) )
+				{
+					$( "#divExtraInfo" ).removeClass( "d-none" ).addClass( "d-block" );
+				} else
+				{
+					$( "#divExtraInfo" ).removeClass( "d-block" ).addClass( "d-none" );
+				}
+			} )
+
+			if ( $( "#divExtraInfo" ).hasClass( "d-none" ) )
+			{
+				$( "#divExtraInfo" ).removeClass( "d-none" ).addClass( "d-block" );
+			} else
+			{
+				$( "#divExtraInfo" ).removeClass( "d-block" ).addClass( "d-none" );
+			}
+		}
+		
+		function openModalBooking ( id )
+		{
+			console.log( id );
+			let time = $( `#${ id }` ).data( 'time' );
+			let date = $( `#${ id }` ).data( 'date' );
+			console.log(time, date);
+			$( '#time-patient-booking' ).text( time );
+			$( '#date-patient-booking' ).text( date )
+			$( '#modalBooking' ).modal( 'show' );
+		}
+
+		
+
+		function validateInputPageDoctor ()
+		{
+			if ( !$( "#name" ).val() )
+			{
+				$( "#name" ).addClass( 'is-invalid' );
+				return false;
+			} else
+			{
+				$( "#name" ).removeClass( 'is-invalid' );
+			}
+
+			if ( !$( "#phone" ).val() )
+			{
+				$( "#phone" ).addClass( 'is-invalid' );
+				return false;
+			}
+			if ( $( "#phone" ).val() )
+			{
+				let isValid = $( "#phone" ).val().match( PHONE_REG );
+				if ( isValid )
+				{
+					$( "#phone" ).removeClass( 'is-invalid' );
+				} else
+				{
+					$( "#phone" ).addClass( 'is-invalid' );
+					return false;
+				}
+			}
+
+
+			if ( !$( "#email" ).val() )
+			{
+				$( "#email" ).addClass( 'is-invalid' );
+				return false;
+			}
+
+			if ( $( "#email" ).val() )
+			{
+				let isValid = $( "#email" ).val().match( EMAIL_REG );
+				if ( isValid )
+				{
+					$( "#email" ).removeClass( 'is-invalid' );
+				} else
+				{
+					$( "#email" ).addClass( 'is-invalid' );
+					return false;
+				}
+			}
+			return true;
+		}
+
+
+	</script>

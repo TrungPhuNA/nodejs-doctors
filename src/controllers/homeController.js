@@ -78,18 +78,17 @@ let getDetailSpecializationPage = async (req, res) => {
 
 let getDetailDoctorPage = async (req, res) => {
     try {
+		
+		
         let currentDate = moment().format('DD/MM/YYYY');
         let sevenDaySchedule = [];
         for (let i = 0; i < 5; i++) {
             let date = moment(new Date()).add(i, 'days').locale('en').format('dddd - DD/MM/YYYY');
             sevenDaySchedule.push(date);
         }
-
         let object = await doctorService.getDoctorWithSchedule(req.params.id, currentDate);
-
         let places = await doctorService.getPlacesForDoctor();
         let postDoctor = await doctorService.getPostForDoctor(req.params.id);
-
 
         return res.render("main/homepage/doctor.ejs", {
             doctor: object.doctor,
@@ -99,8 +98,9 @@ let getDetailDoctorPage = async (req, res) => {
             places: places,
             clinic: object.clinic
         });
+		
     } catch (e) {
-        console.log(e);
+        console.log("erro---------> ", e);
         return res.render('main/homepage/pageNotFound.ejs');
     }
 };
@@ -183,7 +183,7 @@ let getInfoBookingPage = async (req, res) => {
 let postBookingDoctorPageWithoutFiles = async (req, res) => {
     try {
         let item = req.body;
-        console.log('-------------- ITEM: ', item);
+        console.log('-------------- ITEM before: ', item);
         item.statusId = statusNewId;
         item.historyBreath = req.body.breath;
         item.moreInfo = req.body.extraOldForms;
@@ -342,15 +342,6 @@ let getPageAllDoctors = async (req, res)=>{
     }
 };
 
-let getPageAllDoctorsApi = async (req, res)=>{
-    try{
-        let doctors = await homeService.getDataPageAllDoctors();
-        res.status(200).json(doctors);
-    }catch (e) {
-        console.log(e);
-    }
-};
-
 let getPageAllSpecializations =async (req, res)=>{
     try{
         let specializations = await homeService.getDataPageAllSpecializations();
@@ -361,6 +352,18 @@ let getPageAllSpecializations =async (req, res)=>{
         console.log(e);
     }
 };
+
+/*Danh sách api*/
+
+let getPageAllDoctorsApi = async (req, res)=>{
+    try{
+        let doctors = await homeService.getDataPageAllDoctors();
+        res.status(200).json(doctors);
+    }catch (e) {
+        console.log(e);
+    }
+};
+/*****************/
 
 
 module.exports = {

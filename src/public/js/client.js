@@ -327,7 +327,7 @@ function handleBookingPageDoctorNormal(formData) {
         success: function(data) {
             if (typeof (data.patient) === 'string') {
                 alert("Unfortunately, this appointment has enough patients booked, please choose a different time.");
-                window.location.reload(true);
+                // window.location.reload(true);
             } else {
                 window.location.href = `${window.location.origin}/booking-info/${data.patient.id}`;
             }
@@ -340,6 +340,7 @@ function handleBookingPageDoctorNormal(formData) {
 }
 
 function handleBookingPageDoctorWithoutFiles(data) {
+	console.log("data00000000000< ", data);
     $.ajax({
         method: "POST",
         url: `${window.location.origin}/booking-doctor-without-files/create`,
@@ -347,7 +348,7 @@ function handleBookingPageDoctorWithoutFiles(data) {
         success: function(data) {
             if (typeof (data.patient) === 'string') {
                 alert("Unfortunately, this appointment has enough patients booked, please choose a different time.");
-                window.location.reload(true);
+                // window.location.reload(true);
             } else {
                 window.location.href = `${window.location.origin}/booking-info/${data.patient.id}`;
             }
@@ -361,6 +362,7 @@ function handleBookingPageDoctorWithoutFiles(data) {
 }
 
 function handleBookingPageDoctor() {
+	
     $("#btn-confirm-booking").on("click", function(event) {
         let check = validateInputPageDoctor();
         if (check) {
