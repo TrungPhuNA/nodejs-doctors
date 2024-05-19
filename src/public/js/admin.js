@@ -1067,8 +1067,8 @@ function handleDoctorViewInfoPatient() {
                 $('#patientEmail').val(data.email);
                 $('#patientDate').val(data.dateBooking);
                 $('#patientTime').val(data.timeBooking);
-                $('#patientReason').text(data.description);
-                $('#patientAddress').text(data.address);
+                $('#patientReason').val(data.description);
+                $('#patientAddress').val(data.address);
                 if (data.ExtraInfo) {
                     $('#patientHistoryBreath').text(data.ExtraInfo.historyBreath);
                     $('#patientMoreInfo').text(data.ExtraInfo.moreInfo);
