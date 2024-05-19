@@ -35,7 +35,10 @@ let getInfoDoctors = () => {
                 where: { roleId: 2 },
                 include: [
                     { model: db.Doctor_User, required: false },
-                    { model: db.Patient, required: false, where: { statusId: 1 } }
+                    { model: db.Patient, required: false, where: { statusId: 1 } },
+					{
+                        model: db.Schedule, required: false,
+                    }
                 ]
             });
             await Promise.all(doctors.map(async (doctor) => {
@@ -46,10 +49,16 @@ let getInfoDoctors = () => {
                     doctor.setDataValue('clinicName', clinic.name);
                     doctor.setDataValue('specializationName', specialization.name);
                     doctor.setDataValue('countBooking', countBooking);
+                    // doctor.setDataValue('schedules', await db.Schedule.find({
+					// 	where: {
+					// 		doctorId: doctor.Doctor_User.doctorId
+					// 	}
+					// }));
                 } else {
                     doctor.setDataValue('clinicName', "null");
                     doctor.setDataValue('specializationName', "null");
                     doctor.setDataValue('countBooking', 0);
+                    // doctor.setDataValue('schedules', null);
                 }
                 return doctor;
             }));

@@ -81,7 +81,18 @@ let changeStatusPatient = (data, logs) => {
     return new Promise(async (resolve, reject) => {
         try {
 
-            let patient = await db.Patient.findOne({
+            
+
+			if(data.doctorId) {
+				const dataOld = await db.Patient.findOne({
+					where: { id: data.id }
+				})
+				
+				await dataOld.update({
+					doctorId: data.doctorId
+				});
+			}
+			let patient = await db.Patient.findOne({
                 where: { id: data.id }
             });
 
@@ -90,15 +101,29 @@ let changeStatusPatient = (data, logs) => {
                 attributes: [ 'name', 'avatar' ],
             });
 
+			console.log(patient.doctorId);
+
 
             //update tổng số lượt đặt bác sĩ khi status = thành công
             if (data.statusId === statusSuccessId) {
                 let schedule = await db.Schedule.findOne({
                     where: { doctorId: patient.doctorId, time: patient.timeBooking, date: patient.dateBooking }
                 });
-
-                let sum = +schedule.sumBooking;
-                await schedule.update({ sumBooking: sum + 1 });
+				console.log(schedule);
+				if(schedule) {
+					let sum = +(schedule?.sumBooking || 0);
+                	await schedule.update({ sumBooking: sum + 1 });
+				} else {
+					let d = {
+						doctorId: patient.doctorId,
+						date: patient.dateBooking,
+						time: patient.timeBooking,
+						maxBooking: 2,
+						sumBooking: 0
+					}
+					await db.Schedule.create(d);
+				}
+                
             }
 
             //update tổng số lượt đặt bác sĩ khi status = hủy
@@ -106,9 +131,21 @@ let changeStatusPatient = (data, logs) => {
                 let schedule = await db.Schedule.findOne({
                     where: { doctorId: patient.doctorId, time: patient.timeBooking, date: patient.dateBooking }
                 });
-
-                let sum = +schedule.sumBooking;
-                await schedule.update({ sumBooking: sum - 1 });
+				if(schedule) {
+					let sum = +(schedule?.sumBooking || 0);
+					await schedule.update({ sumBooking: (sum ? sum - 1 : 0) });
+				} else {
+					
+					let d = {
+						doctorId: patient.doctorId,
+						date: patient.dateBooking,
+						time: patient.timeBooking,
+						maxBooking: 2,
+						sumBooking: 0
+					}
+					await db.Schedule.create(d);
+				}
+                
             }
 
 

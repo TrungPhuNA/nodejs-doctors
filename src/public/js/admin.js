@@ -756,22 +756,65 @@ function callAjaxRenderModalInfo(patientId, option) {
         url: `${window.location.origin}/api/get-detail-patient-by-id`,
         data: { patientId: patientId },
         success: function(data) {
+			console.log("data---------> ", data);
             $('#patientName').val(data.name);
             $('#btn-confirm-patient-done').attr('data-patient-id', data.id);
             $('#patientPhone').val(data.phone);
             $('#patientEmail').val(data.email);
             $('#patientDate').val(data.dateBooking);
             $('#patientTime').val(data.timeBooking);
-            $('#patientReason').text(data.description);
-            $('#patientAddress').text(data.address);
-            if (data.ExtraInfo) {
-                $('#patientHistoryBreath').text(data.ExtraInfo.historyBreath);
-                $('#patientMoreInfo').text(data.ExtraInfo.moreInfo);
-            }
-            if (option) {
-                $('#btn-confirm-patient-done').css('display', 'none');
-                $('#btn-cancel-patient').text("OK");
-            }
+            $('#patientReason').val(data.description);
+            $('#patientAddress').val(data.address);
+            if(data.doctorId > 0) {
+				$('#extra-info').removeClass('d-none');
+				$('#confirm-doctor').addClass('d-none')
+				if (data.ExtraInfo) {
+					$('#patientHistoryBreath').text(data.ExtraInfo.historyBreath);
+					$('#patientMoreInfo').text(data.ExtraInfo.moreInfo);
+				}
+				if (option) {
+					$('#btn-confirm-patient-done').css('display', 'none');
+					$('#btn-cancel-patient').text("OK");
+				}
+			} else {
+				$('#extra-info').addClass('d-none');
+				$('#confirm-doctor').removeClass('d-none');
+				$('#confirm-doctor').addClass('not-doctor')
+				let doctors = data?.doctors;
+				let options = [
+                    { value: '', text: 'Please choose doctor' },
+                ];
+				if(doctors?.length > 0) {
+					let dataIds = doctors?.reduce((newItem, item) => {
+						let obj = {
+							value: item.id,
+							text: item.name
+						};
+						let check = false;
+						if(item.Schedules?.length > 0) {
+							check = item.Schedules.some(e => e.date == data.dateBooking &&e.sumBooking == e.maxBooking && e.time == data.timeBooking ) 
+							
+						}
+
+						if(!check) {
+							newItem.push(obj);
+						}
+
+						return newItem
+					}, []);
+					options = options.concat(dataIds)
+				}
+				
+
+                const $select = $('#doctorId');
+
+                options.forEach(option => {
+                    const $option = $('<option></option>')
+                        .attr('value', option.value)
+                        .text(option.text);
+                    $select.append($option);
+                });
+			}
             $('#modalDetailPatient').modal('show');
         },
         error: function(err) {
@@ -852,6 +895,23 @@ function convertStringToDateClient(string) {
 
 function handleAfterCallingPatient() {
     $('#btn-confirm-patient-done').on('click', function(e) {
+		let patientId = $('#btn-confirm-patient-done').attr('data-patient-id');
+		let data = { 
+			patientId: patientId, 
+			status: 'confirmed'
+		};
+		console.log($('#confirm-doctor').hasClass('not-doctor'));
+		if($('#confirm-doctor').hasClass('not-doctor')) {
+			let select = document.getElementById("doctorId");
+			let doctorId = select.value;
+			if(doctorId && doctorId != "") {
+				data.doctorId = doctorId;
+			} else {
+				$('#errorSelect').removeClass('d-none')
+				return;
+			}
+			
+		}
         if (!confirm('Have you phoned to confirm whether the patient has an appointment?')) {
             return;
         }
@@ -860,15 +920,17 @@ function handleAfterCallingPatient() {
         countPending--;
         countConfirmed++;
         $('#modalDetailPatient').modal('hide');
-        let patientId = $('#btn-confirm-patient-done').attr('data-patient-id');
+        
         $('#tableNeedConfirmPatients tbody').find(`.btn-pending-patient[data-patient-id=${patientId}]`).closest("tr").remove();
         $('#count-need').text(countPending);
         $('#count-confirmed').text(countConfirmed);
 
+		
+		
         $.ajax({
             url: `${window.location.origin}/supporter/change-status-patient`,
             method: 'POST',
-            data: { patientId: patientId, status: 'confirmed' },
+            data: data,
             success: function(data) {
                 console.log(data)
                 let patient = data.patient;

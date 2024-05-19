@@ -105,6 +105,7 @@ let postChangeStatusPatient = async (req, res) => {
         let status = req.body.status;
         let statusId = '';
         let content = '';
+		let doctorId = req.body.doctorId;
         if (status === 'pending') {
             statusId = statusPendingId;
             content = "New appointments have been received";
@@ -122,6 +123,7 @@ let postChangeStatusPatient = async (req, res) => {
 
         let data = {
             id: id,
+			doctorId: doctorId,
             statusId: statusId,
             updatedAt: Date.now()
         };

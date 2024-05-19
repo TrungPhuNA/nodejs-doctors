@@ -280,7 +280,9 @@ let imageImageOldForms = multer({
 let getDetailPatientBooking = async (req, res) => {
     try {
         let patient = await patientService.getDetailPatient(req.body.patientId);
-        return res.status(200).json(patient);
+		let data = patient.dataValues;
+		data.doctors = await userService.getInfoDoctors();
+        return res.status(200).json(data);
     } catch (e) {
         console.log(e);
         return res.status(500).json(e);

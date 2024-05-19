@@ -149,24 +149,57 @@
                         <textarea class="form-control" name="patientAddress" id="patientAddress"></textarea>
                     </div>
 
-                    <div class="col-12">
-                        <label for="patientAddress">Extra info:</label>
-                    </div>
+                    <div class="row col-12" id="extra-info">
+						<div class="col-12">
+							<label for="patientAddress">Extra info:</label>
+						</div>
+	
+						<div class="form-group col-6">
+							<label class="col-form-label text-label" for="patientHistoryBreath">History of respiratory tract diseases:</label>
+							<textarea  class="form-control" name="patientHistoryBreath" id="patientHistoryBreath"></textarea>
+						</div>
+	
+						<div class="form-group col-6">
+							<label class="col-form-label text-label" for="patientMoreInfo">Information on previous exams:</label>
+							<textarea  class="form-control" name="patientMoreInfo" id="patientMoreInfo"></textarea>
+						</div>
+	
+						<div class="form-group col-12">
+							<label class="col-form-label text-label" for="patientNote">Note:</label>
+							<textarea  class="form-control" name="patientNote" id="patientNote"></textarea>
+						</div>
+					</div>
 
-                    <div class="form-group col-6">
-                        <label class="col-form-label text-label" for="patientHistoryBreath">History of respiratory tract diseases:</label>
-                        <textarea  class="form-control" name="patientHistoryBreath" id="patientHistoryBreath"></textarea>
-                    </div>
+					<div class="row col-12 d-none" id="extra-info">
+						<div class="col-12">
+							<label for="patientAddress">Extra info:</label>
+						</div>
+	
+						<div class="form-group col-6">
+							<label class="col-form-label text-label" for="patientHistoryBreath">History of respiratory tract diseases:</label>
+							<textarea  class="form-control" name="patientHistoryBreath" id="patientHistoryBreath"></textarea>
+						</div>
+	
+						<div class="form-group col-6">
+							<label class="col-form-label text-label" for="patientMoreInfo">Information on previous exams:</label>
+							<textarea  class="form-control" name="patientMoreInfo" id="patientMoreInfo"></textarea>
+						</div>
+	
+						<div class="form-group col-12">
+							<label class="col-form-label text-label" for="patientNote">Note:</label>
+							<textarea  class="form-control" name="patientNote" id="patientNote"></textarea>
+						</div>
+					</div>
+					<div id="confirm-doctor" class="row col-12 d-none">
+						<div class="form-group col-md-6 col-12">
+							<label class="col-form-label text-label" for="patientHistoryBreath">Choose doctor</label>
+							<select name="doctorId" id="doctorId" class="w-100 form-control">
+								
+							</select>
+							<p class="text-danger d-none" id="errorSelect">Please choose a doctor</p>
+						</div>
+					</div>
 
-                    <div class="form-group col-6">
-                        <label class="col-form-label text-label" for="patientMoreInfo">Information on previous exams:</label>
-                        <textarea  class="form-control" name="patientMoreInfo" id="patientMoreInfo"></textarea>
-                    </div>
-
-                    <div class="form-group col-12">
-                        <label class="col-form-label text-label" for="patientNote">Note:</label>
-                        <textarea  class="form-control" name="patientNote" id="patientNote"></textarea>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">

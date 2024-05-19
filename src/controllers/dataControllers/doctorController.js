@@ -49,10 +49,13 @@ exports.bookingData = async  (req, res)=>{
             item.placeId = item.places;
         }
 		/*statusId :
-		 5: đăng ký khám chưa có bsi
+		 	5: đăng ký khám chưa có bsi
 		/ 6: hủy đăng ký
 		*/
-		item.statusId = 5
+		item.statusId = 4;
+		if(item.dateBooking) {
+			item.dateBooking = moment(item.dateBooking).format('DD/MM/yyyy')
+		}
 		
         item.createdAt = Date.now();
         console.log('-------------- booking data: ', item);
