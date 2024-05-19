@@ -1,0 +1,349 @@
+<% extend("../app.ejs") %>
+	<section class="detail-nav">
+		<div class="container">
+			<div class="container">
+				<div class="row">
+					<div class="col-2">
+						<div class="menu-title text-decoration-none">
+							<a href="/" class="text-decoration-none">
+								<img class="menu-nav" src="/images/background/smile.png" alt="img logo">
+								<span class="text-decoration-none">Doctors care</span>
+							</a>
+						</div>
+					</div>
+					<div class="col-8 d-flex flex-row justify-content-center align-self-center menu-type">
+						<span class="d-block"><a href="/" class="text-decoration-none">Homepage</a></span>
+						<span class="d-block mx-5"><a href="/for-patients" class="text-decoration-none">For
+								patients</a></span>
+						<span class="d-block"><a href="/for-doctors" class="text-decoration-none">For doctors</a></span>
+					</div>
+					<div class="col-2 d-flex justify-content-center align-items-center">
+						<span><a href=" https://www.youtube.com/channel/UCHqJxLo7mKam9GKqqwr2wfA?sub_confirmation=1"
+								target="_blank" class="text-decoration-none">Need support?</a></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+	<div class="doctor-detail-page mt-5" id="doctor-detail-page">
+		<div class="container">
+			<div class="d-flex">
+				<h3>Đặt lịch khám</h3>
+			</div>
+			<div class="mt-5">
+				<p id="errorForm" class="alert alert-danger w-100 d-none" role="alert"></p>
+
+				<form id="form-patient-booking">
+					<div class="row">
+						<div class="form-group col-md-6 col-12">
+							<label for="patient-name" class="col-form-label text-label">Patient information:</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="Full name">
+							<div class="invalid-feedback">
+								Patient names cannot be left blank
+							</div>
+						</div>
+						<div class="form-group col-md-6 col-12">
+							<label for="gender" class="col-form-label text-label"> Gender: </label>
+							<div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="gender" id="selectMale"
+										value="male" checked>
+									<label class="form-check-label" for="selectMale">Male</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="gender" id="selectFemale"
+										value="female">
+									<label class="form-check-label" for="selectFemale">Female</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-md-6 col-12">
+							<input type="text" class="form-control" id="phone" name="phone"
+								placeholder="Phone number (*)">
+							<div class="invalid-feedback"> Invalid phone number</div>
+						</div>
+						<div class="form-group col-md-6 col-12">
+							<input type="text" class="form-control" id="email" name="email" placeholder="Email (*)">
+							<div class="invalid-feedback">
+								Invalid email
+							</div>
+						</div>
+						<div class="form-group col-md-6 col-12">
+							<input type="text" class="form-control" id="year" name="year" placeholder="Year">
+						</div>
+						<div class="form-group col-md-6 col-12">
+							<input type="text" class="form-control" id="address" name="address" placeholder="Address">
+						</div>
+						<div class="form-group col-md-6 col-12">
+							<label for="dateBooking" class="col-form-label">Date of examination :</label>
+							<input type="date" class="form-control " min="now" id="dateBooking" name="dateBooking"
+								placeholder="Time of examination">
+							<div class="invalid-feedback">
+								Please choose date
+							</div>
+
+						</div>
+						<div class="form-group col-12 col-md-6">
+							<label for="" class="col-form-label">
+								Time of examination
+							</label>
+							<div id="lsBtnSchedule">
+								<button id="time-08-09" type="button" class="btn  btn-light mr-3 my-3 btn-schedule"
+									value="08:00 - 09:00"> 08:00 - 09:00
+								</button>
+								<button id="time-09-10" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="09:00 - 10:00"> 09:00 - 10:00
+								</button>
+								<button id="time-10-11" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="10:00 - 11:00"> 10:00 - 11:00
+								</button>
+								<button id="time-11-12" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="11:00 - 12:00"> 11:00 - 12:00
+								</button>
+								<button id="time-13-14" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="13:00 - 14:00"> 13:00 - 14:00
+								</button>
+								<button id="time-14-15" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="14:00 - 15:00"> 14:00 - 15:00
+								</button>
+								<button id="time-15-16" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="15:00 - 16:00"> 15:00 - 16:00
+								</button>
+								<button id="time-16-17" type="button" class="btn btn-light mr-3 my-3 btn-schedule"
+									value="16:00 - 17:00"> 16:00 - 17:00
+								</button>
+							</div>
+							<div class="text-danger d-none" id="errorTime">
+								Please choose time
+							</div>
+						</div>
+						<div class="form-group col-12">
+							<label for="description" class="col-form-label">Information patient:</label>
+							<textarea class="form-control" rows="5" id="description" name="description"></textarea>
+						</div>
+
+					</div>
+					<div class="form-group d-flex justify-content-center">
+						<a href="/" class="mr-5 btn btn-danger">Hủy</a>
+						<button type="submit" class="btn btn-primary">Đặt lịch</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+
+
+		// let pathName = window.location.pathname.split( '/' );
+		// let id = pathName[ pathName.length - 1 ];
+		// const doctor_detail = $( '#doctor-detail-page' );
+
+		// document.addEventListener( 'DOMContentLoaded', function ()
+		// {
+		// 	console.log( "load---------->" );
+		let fetchData = ( host, data ) =>
+		{
+
+			console.log( data );
+			fetch( `${ host }/api/v1/booking`,
+				{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify( data )
+
+				} )
+				.then( response => response.json() )
+				.then( response =>
+				{
+					window.location.href = '/'
+				} )
+				.catch( error =>
+				{
+					let e = document.getElementById( 'errorForm' );
+					e.innerHTML = 'Booking fail';
+					e.removeClass( 'd-none' )
+				} );
+		}
+		// 	fetchData( host, id );
+		// } )
+
+
+
+
+		function validate ()
+		{
+			let count = 0
+			if ( !$( "#name" ).val() )
+			{
+				$( "#name" ).addClass( 'is-invalid' );
+				count++
+			} else
+			{
+				$( "#name" ).removeClass( 'is-invalid' );
+			}
+
+			if ( !$( "#phone" ).val() )
+			{
+				$( "#phone" ).addClass( 'is-invalid' );
+				count++
+			}
+			if ( $( "#phone" ).val() )
+			{
+				let isValid = $( "#phone" ).val().match( PHONE_REG );
+				if ( isValid )
+				{
+					$( "#phone" ).removeClass( 'is-invalid' );
+				} else
+				{
+					$( "#phone" ).addClass( 'is-invalid' );
+					count++
+				}
+			}
+
+
+			if ( !$( "#email" ).val() )
+			{
+				$( "#email" ).addClass( 'is-invalid' );
+				count++
+			}
+
+			if ( $( "#email" ).val() )
+			{
+				let isValid = $( "#email" ).val().match( EMAIL_REG );
+				if ( isValid )
+				{
+					$( "#email" ).removeClass( 'is-invalid' );
+				} else
+				{
+					$( "#email" ).addClass( 'is-invalid' );
+					count++
+				}
+			}
+			if ( !$( "#dateBooking" ).val() )
+			{
+				$( "#dateBooking" ).addClass( 'is-invalid' );
+				count++
+			} else
+			{
+				$( "#dateBooking" ).removeClass( 'is-invalid' );
+			}
+
+			let schedule = document.getElementsByClassName( 'btn-css' )[ 0 ]?.value;
+			if ( !schedule )
+			{
+				$( "#errorTime" ).removeClass( 'd-none' );
+				count++
+			} else
+			{
+				$( "#errorTime" ).addClass( 'd-none' );
+			}
+			console.log( count );
+			return count <= 0;
+		}
+
+		function handleBtnSchedule ()
+		{
+			let scheduleArr = null;
+			$( '.btn-schedule' ).unbind( 'click' ).bind( 'click', function ( e )
+			{
+				let idBtn = $( this ).attr( 'id' );
+
+				$( `#${ idBtn }` ).toggleClass( 'btn btn-css' );
+
+				let time = $( `#${ idBtn }` ).attr( "value" );
+				// let date = $( "#datepicker" ).val();
+
+				//check có class thì add new row, else try to remove
+				if ( $( `#${ idBtn }` ).hasClass( "btn-css" ) )
+				{
+					if ( scheduleArr )
+					{
+						let btn = document.getElementById( scheduleArr.id );
+						btn.classList.remove( 'btn-css' );
+						btn.classList.add( 'btn' );
+					}
+					let item = {
+						// 'date': date,
+						'time': time,
+						'id': `${ idBtn }`
+					};
+					scheduleArr = item;
+				} else
+				{
+					let timeCheck = $( `#${ idBtn }` ).attr( "value" );
+					if ( scheduleArr && scheduleArr.time == timeCheck )
+					{
+						let btn = document.getElementById( scheduleArr.id );
+						btn.classList.remove( 'btn-css' );
+						btn.classList.add( 'btn' );
+						scheduleArr = null;
+					}
+				}
+				return scheduleArr
+			} );
+			console.log( "click------->", scheduleArr );
+
+			return scheduleArr;
+		}
+
+		handleBtnSchedule();
+		document.addEventListener( 'DOMContentLoaded', ( event ) =>
+		{
+			const dateInput = document.getElementById('dateBooking');
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+            const day = String(today.getDate()).padStart(2, '0');
+            const minDate = `${year}-${month}-${day}`;
+            dateInput.setAttribute('min', minDate);
+			const form = document.getElementById( 'form-patient-booking' );
+
+			form.addEventListener( 'submit', ( event ) =>
+			{
+				event.preventDefault();
+				submit();
+			} );
+		} );
+		function submit ()
+		{
+			let timeSchedule = document.getElementsByClassName( 'btn-css' )[ 0 ]?.value;
+			let data = {
+				name: $( "#name" ).val(),
+				phone: $( "#phone" ).val(),
+				email: $( "#email" ).val(),
+				gender: $( 'input[name="gender"]:checked' ).val(),
+				year: $( "#year" ).val(),
+				address: $( "#address" ).val(),
+				description: $( "#description" ).val(),
+				dateBooking: $( "#dateBooking" ).val(),
+				timeBooking: timeSchedule,
+			}
+			console.log( data );
+			console.log( document.getElementsByClassName( 'btn-css' ) );
+			let check = validate();
+			console.log( check );
+			if ( check )
+			{
+
+				let timeSchedule = document.getElementsByClassName( 'btn-css' )[ 0 ]?.value;
+				let data = {
+					name: $( "#name" ).val(),
+					phone: $( "#phone" ).val(),
+					email: $( "#email" ).val(),
+					gender: $( 'input[name="gender"]:checked' ).val(),
+					year: $( "#year" ).val(),
+					address: $( "#address" ).val(),
+					description: $( "#description" ).val(),
+					dateBooking: $( "#dateBooking" ).val(),
+					timeBooking: timeSchedule,
+				}
+				let host = window.location.origin;
+				fetchData( host, data )
+			}
+
+		}
+
+	</script>

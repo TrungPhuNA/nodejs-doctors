@@ -7,15 +7,19 @@
                     <img class="menu-nav" src="../images/background/menu-nav.png" alt="img logo">
                     <span>Đặt lịch khám</span>
                 </div>
-                <div class="home-nav">
+                <div class="home-nav h-auto ">
                     <div class="nav-item">
                         <% if(user){%>
                             <a href="/users" target="_blank">Tổng quan</a>
 
                             <%} else {%>
-                                <a href="/login">Log in</a>
+                                <a class="py-2" href="/login">Log in</a>
                             <% }%>
+							
                     </div>
+					<div class="nav-item">
+						<a class="" href="/booking">Đặt lịch</a>
+					</div>
                 </div>
             </div>
             <div class="col-10 d-none d-md-block d-md-flex justify-content-between ">

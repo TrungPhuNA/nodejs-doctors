@@ -2,6 +2,7 @@
 import moment from "moment";
 require("dotenv").config();
 import * as doctorService from '../../services/doctorService';
+import * as patientService from '../../services/patientService';
 
 
 exports.showDoctor = async  (req, res)=>{
@@ -32,6 +33,41 @@ exports.showDoctor = async  (req, res)=>{
 		res.status(500).json({
 			status: "error",
 			message: e?.message
+		});
+    }
+};
+
+
+
+exports.bookingData = async  (req, res)=>{
+    try{
+
+		let item = req.body;
+        if (item.places === 'none' || !item.places) {
+            item.placeId = 1;
+        }else {
+            item.placeId = item.places;
+        }
+		/*statusId :
+		 5: đăng ký khám chưa có bsi
+		/ 6: hủy đăng ký
+		*/
+		item.statusId = 5
+		
+        item.createdAt = Date.now();
+        console.log('-------------- booking data: ', item);
+        let patient = await patientService.bookingData(item);
+        res.status(200).json({
+			status: "success",
+			data: {
+				patient: patient,
+			}
+		});
+    }catch (e) {
+		console.log("booking----------> ", e);
+		res.status(500).json({
+			status: "error",
+			message: "Booking fail"
 		});
     }
 };

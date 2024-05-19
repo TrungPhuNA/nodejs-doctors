@@ -67,6 +67,7 @@ let initRoutes = (app) => {
 	/*Danh sách api*/
     router.get("/api/v1/doctors", home.getPageAllDoctorsApi);
     router.get("/api/v1/doctor/show/:id", doctorController.showDoctor);
+    router.post("/api/v1/booking", doctorController.bookingData);
 	/******************************************************/
 
 
@@ -92,6 +93,8 @@ let initRoutes = (app) => {
     router.get('/contact', home.getContactPage);
     router.get('/detail/specialization/:id', home.getDetailSpecializationPage);
     router.get('/detail/doctor/:id', home.getDetailDoctorPage);
+    router.get('/booking', home.bookingView);
+
 
     router.post('/booking-doctor-without-files/create', home.postBookingDoctorPageWithoutFiles);
     router.post('/booking-doctor-normal/create', home.postBookingDoctorPageNormal);

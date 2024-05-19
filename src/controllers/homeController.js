@@ -180,6 +180,16 @@ let getInfoBookingPage = async (req, res) => {
     }
 };
 
+let bookingView = async (req, res) => {
+    try {
+        return res.render('main/homepage/booking.ejs', {
+        });
+    } catch (e) {
+        console.log(e);
+        return res.render('main/homepage/pageNotFound.ejs');
+    }
+};
+
 let postBookingDoctorPageWithoutFiles = async (req, res) => {
     try {
         let item = req.body;
@@ -192,6 +202,7 @@ let postBookingDoctorPageWithoutFiles = async (req, res) => {
         }else {
             item.placeId = item.places;
         }
+		
 
         item.createdAt = Date.now();
         console.log('-------------- ITEM: ', item);
@@ -389,5 +400,6 @@ module.exports = {
     getPageAllClinics: getPageAllClinics,
     getPageAllDoctors: getPageAllDoctors,
     getPageAllDoctorsApi: getPageAllDoctorsApi,
-    getPageAllSpecializations: getPageAllSpecializations
+    getPageAllSpecializations: getPageAllSpecializations,
+	bookingView: bookingView
 };

@@ -278,6 +278,17 @@ let getComments = () => {
         }
     });
 };
+
+let bookingData = async (data) => {
+	if (data.places === 'none') {
+		data.placeId = 1;
+	}else {
+		data.placeId = data.places;
+	} 
+	if(!data.doctorId) data.doctorId = 0;
+	let patient = await db.Patient.create(data);
+	return patient;
+}
 module.exports = {
     getInfoBooking: getInfoBooking,
     getForPatientsTabs: getForPatientsTabs,
@@ -285,5 +296,6 @@ module.exports = {
     createNewPatient: createNewPatient,
     getDetailPatient: getDetailPatient,
     getLogsPatient: getLogsPatient,
-    getComments: getComments
+    getComments: getComments,
+	bookingData: bookingData
 };
